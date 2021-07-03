@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Giới thiệu thương hiệu</title>
+<style>
+.banner {
+	height: 300px;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!--bottom-header-->
+		<!--start-breadcrumbs-->
+		<div class="breadcrumbs">
+			<div class="container">
+				<div
+					th:style="'background:url(' + @{'/uploads/brand/'+${brand.image}} +  ');'"
+					class="banner"></div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--prdt-starts-->
+		<div class="prdt">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h2
+							style="text-transform: uppercase; font-family: Arial; margin-bottom: 2%; color: #df6d6d; margin-left: 10px;">
+							<strong
+								th:utext="('Lịch sử phát triển của thương hiệu ' + ${brand.brandName})"></strong>
+						</h2>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<section th:utext="${brand.content}" style="line-height: 25px;"></section>
+						<div class="clearfix"></div>
+						<p><span style="font-size:16px;">-----------------------------------------------------------</span></p>
+						<p>
+							<span style="font-size: 16px;">Để được tư vấn cụ
+								thể,&nbsp;Quý khách hàng liên hệ tới <a href="https://galle.vn/"
+								target="_blank">Luxury Watches</a> qua:<br> <strong>Hotline:</strong>
+								<span style="color: #FF0000;">0982565569</span><br> 
+								<a href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
+								https://www.facebook.com/dang0599/</a>
+									<br>
+									<strong>Hệ thống Showroom:</strong>
+								<a
+								href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
+							</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--product-end-->
+		<!--information-starts-->
+	</div>
+
+</body>
+</html>

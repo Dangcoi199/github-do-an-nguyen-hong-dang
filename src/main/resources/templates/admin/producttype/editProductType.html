@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Loại sản phẩm</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý loại sản phẩm
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Cập nhật loại sản phẩm</h2>
+						</div>
+					</div>
+					<form class="form" id="formUpdateProType">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="typeName" class="form-label">Tên loại sản
+									phẩm</label> <input id="typeName" name="typeName" type="text"
+									placeholder="Nhập tên danh mục" class="form-control"
+									th:value="${productType.typeName}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="shortDescription" class="form-label">Mô tả
+									ngắn</label>
+								<textarea class="form-control" rows="5" id="shortDescription"
+									name="shortDescription"
+									th:utext="${productType.shortDescription}"></textarea>
+								<span class="form-message"></span>
+							</div>
+						</div>
+						<input type="hidden" th:value="${productType.id}" id="idCate"
+							name="id">
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Lưu thay đổi</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			// Mong muốn của chúng ta
+			Validator({
+				form : '#formUpdateProType',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#typeName',
+								'Vui lòng không để trống !'),
+						Validator.minLength('#typeName', 6,
+								'Tối thiểu phải nhập 6 ký tự !'), ],
+				onSubmit : function(data) {
+					console.log(data);
+					$.ajax({
+						url : '/productTypes',
+						type : 'PUT',
+						contentType : 'application/json',
+						data : JSON.stringify(data),
+						dataType : 'json',
+						success : function(response) {
+							window.location.href = "/admin_listProductType";
+							alert("Cập nhật danh mục thành công !");
+						},
+						error : function(response) {
+							window.location.href = "/admin_listProductType";
+							alert("Lỗi hệ thống !");
+						}
+					});
+				}
+			});
+		</script>
+</body>
+</html>
+

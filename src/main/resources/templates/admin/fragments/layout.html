@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:fragment="head">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Admin</title>
+
+<!-- Custom fonts for this template-->
+<link th:href="@{admin/vendor/fontawesome-free/css/all.min.css}"
+	rel="stylesheet" type="text/css">
+
+<!-- Page level plugin CSS-->
+<link th:href="@{admin/vendor/datatables/dataTables.bootstrap4.css}"
+	rel="stylesheet">
+<!-- Custom styles for this template-->
+<link th:href="@{admin/css/sb-admin.css}" rel="stylesheet">
+<link th:href="@{admin/css/table.css}" rel="stylesheet">
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script th:src="@{admin/vendor/jquery/jquery.min.js}"></script>
+	<script th:src="@{admin/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	 <script type="text/javascript" th:src="@{admin/js/validator.js}" ></script>
+	 <link th:href="@{admin/css/validation.css}" rel="stylesheet">
+</head>
+<body>
+	<th:block th:replace="admin/fragments/header :: header"></th:block>
+	<div layout:fragment="content" id="wrapper"></div>
+	<th:block th:replace="admin/fragments/footer :: footer"></th:block>
+	<!-- Bootstrap core JavaScript-->
+	<!-- Core plugin JavaScript-->
+	<script th:src="@{admin/vendor/jquery-easing/jquery.easing.min.js}"></script>
+
+	<!-- Page level plugin JavaScript-->
+	<script th:src="@{admin/vendor/chart.js/Chart.min.js}"></script>
+	<script th:src="@{admin/vendor/datatables/jquery.dataTables.js}"></script>
+	<script th:src="@{admin/vendor/datatables/dataTables.bootstrap4.js}"></script>
+	<!-- Custom scripts for all pages-->
+	<script th:src="@{admin/js/sb-admin.min.js}"></script>
+	<!-- Demo scripts for this page-->
+	<script th:src="@{admin/js/demo/datatables-demo.js}"></script>
+</body>
+</html>

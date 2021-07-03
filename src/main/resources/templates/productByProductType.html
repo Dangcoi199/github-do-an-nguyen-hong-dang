@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Loại sản phẩm</title>
+<style type="text/css">
+.product_related_title {
+	font-size: 25px;
+	text-align: center;
+	font-family: Verdana, sans-serif;
+	font-weight: bold;
+	color: #662d91;;
+}
+
+.relativepro {
+	margin-top: 30px;
+}
+</style>
+<script type="text/javascript"
+	th:src="@{pagination/jquery.twbsPagination.js}"></script>
+<script type="text/javascript">
+	function addItem(item) {
+		var data = $(item).val();
+		$.ajax({
+			url : '/add_item',
+			type : 'POST',
+			contentType : 'application/json',
+			data : JSON.stringify(data),
+			dataType : 'json',
+			success : function(response) {
+				location.reload();
+			},
+			error : function(response) {
+				alert("Lỗi hệ thống");
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!--start-breadcrumbs-->
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main" style="font-size: 13px;">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li><a th:href="@{/productByGender(gender=${gender})}"
+							th:utext="('Đồng hồ ' + ${gender})"></a></li>
+						<li class="active" th:utext="${name}"></li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 relativepro">
+					<div class="product_related_title">
+						<span>Có <strong th:utext="${sizeResult}"></strong> sản
+							phẩm phù hợp
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--prdt-starts-->
+		<div class="prdt">
+			<div class="container">
+				<div class="prdt-top">
+					<div class="col-md-9 prdt-left">
+						<th:block th:each="product : ${listProducts.listResult}">
+							<div class="col-md-4 product-left" style="margin-bottom: 3%;">
+								<div class="product-main simpleCart_shelfItem">
+									<a th:href="@{/productDetail(code=${product.code})}"
+										class="mask"><img class="img-responsive zoom-img"
+										th:src="@{'/uploads/sanpham/'+${product.image}}" alt="" /></a>
+									<div class="product-bottom">
+										<h3 th:utext="${product.name}"></h3>
+
+										<h5 style="margin-top: 20px;" th:if="${product.priceSale}">
+											<del
+												th:utext="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></del>
+											VNĐ
+										</h5>
+										<h4 style="margin-top: 15px;" th:if="${product.priceSale}">
+											<button class="item_add" th:value="${product.id}"
+												style="background: #fff;" onclick="addItem(this)"
+												th:unless="${product.quantity} == 0">
+												<i></i>
+											</button>
+											<span
+												th:utext="${#numbers.formatDecimal(product.priceSale, 0, 'COMMA', 0, 'POINT')}"></span>
+											<span>VNĐ</span>
+										</h4>
+										<h4 style="margin-top: 35px;" th:unless="${product.priceSale}">
+											<button class="item_add" th:value="${product.id}"
+												style="background: #fff;" onclick="addItem(this)"
+												th:unless="${product.quantity} <= 0">
+												<i></i>
+											</button>
+											<span
+												th:utext="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span>
+											<span>VNĐ</span>
+										</h4>
+									</div>
+									<th:block th:if="${product.saleProduct}">
+										<div class="srch" th:switch="${product.saleProduct.sale.name}">
+											<span th:case="'Giảm giá 50%'">-50%</span> <span
+												th:case="'Giảm giá 40%'">-40%</span> <span
+												th:case="'Giảm giá 20%'">-20%</span> <span
+												th:case="'Giảm giá 30%'">-30%</span> <span
+												th:case="'Giảm giá 10%'">-10%</span>
+										</div>
+									</th:block>
+									<th:block th:unless="${product.saleProduct}">
+										<div class="srch">
+											<span> NEW </span>
+										</div>
+									</th:block>
+
+								</div>
+							</div>
+						</th:block>
+						<div class="clearfix"></div>
+						<nav aria-label="Page navigation" style="margin-left: 2%;">
+							<ul class="pagination" id="pagination"></ul>
+						</nav>
+						<input type="hidden" id="totalPage" name="totalPage"
+							th:value="${listProducts.totalPage}" />
+						<form th:action="@{/productByProductType}" method='GET'
+							id="formSubmit">
+							<input type="hidden" id="page" name="page"
+								th:value="${listProducts.page}" /> <input type="hidden"
+								id="gender" name="gender" th:value="${gender}" /> <input
+								type="hidden" id="code" name="code" th:value="${code}" /> <input
+								type="hidden" id="loaiDayCode" name="loaiDayCode"
+								th:value="${loaiDayCode}" /> <input type="hidden"
+								id="khoangGiaCode" name="khoangGiaCode"
+								th:value="${khoangGiaCode}" /> <input type="hidden"
+								id="brandCode" name="brandCode" th:value="${brandCode}" />
+						</form>
+
+						<script>
+							var totalPages = $("#totalPage").val();
+							var currentPage = $("#page").val();
+							var gender = $("#gender").val();
+							$(function() {
+								window.pagObj = $('#pagination')
+										.twbsPagination(
+												{
+													totalPages : totalPages,
+													visiblePages : 5,
+													startPage : currentPage,
+													onPageClick : function(
+															event, page) {
+														if (currentPage != page) {
+															/* $('#limit').val(12); */
+															$('#page')
+																	.val(page);
+															$('#gender').val(
+																	gender);
+															$('#formSubmit')
+																	.submit();
+														}
+													}
+												})
+										.on(
+												'page',
+												function(event, page) {
+													console
+															.info(page
+																	+ ' (from event listening)');
+												});
+							});
+						</script>
+					</div>
+					<div class="col-md-3 prdt-right">
+						<div class="w_sidebar">
+							<section class="sky-form">
+								<h4>Thương hiệu</h4>
+								<div class="row1 row2 scroll-pane">
+									<div class="col col-4" id="filterBrand">
+										<label class="checkbox"> <input type="radio"
+											name="radioBrand" value="all" checked="checked"><i></i><span>Tất
+												cả</span>
+										</label>
+										<th:block th:each="brand : ${brands}">
+											<label class="checkbox"> <input type="radio"
+												name="radioBrand" th:value="${brand.code}"
+												th:checked="(${brandCode} == ${brand.code})"><i></i><span
+												th:utext="${brand.brandName}"></span>
+											</label>
+										</th:block>
+									</div>
+								</div>
+							</section>
+							<script>
+								//Filter
+								document.getElementById("filterBrand").onchange = function() {
+									var checkbox = document
+											.getElementsByName("radioBrand");
+									for (var i = 0; i < checkbox.length; i++) {
+										if (checkbox[i].checked === true) {
+											$('#page').val(null);
+											$('#brandCode').val(
+													checkbox[i].value);
+											$('#formSubmit').submit();
+										}
+									}
+								};
+							</script>
+							<section class="sky-form">
+								<h4>Loại dây</h4>
+								<div class="row1 row2 scroll-pane">
+									<div class="col col-4" id="filterLoaiDay">
+										<label class="checkbox"> <input type="radio"
+											name="radioLoaiDay" value="all" checked="checked"><i></i><span>Tất
+												cả</span>
+										</label>
+										<th:block th:each="loaiDay : ${loaiDays}">
+											<label class="checkbox"> <input type="radio"
+												name="radioLoaiDay" th:value="${loaiDay.code}"
+												th:checked="(${loaiDayCode} == ${loaiDay.code})"><i></i><span
+												th:utext="${loaiDay.loaiDay}"></span>
+											</label>
+										</th:block>
+									</div>
+								</div>
+							</section>
+							<script>
+								//Filter
+								document.getElementById("filterLoaiDay").onchange = function() {
+									var checkbox = document
+											.getElementsByName("radioLoaiDay");
+									for (var i = 0; i < checkbox.length; i++) {
+										if (checkbox[i].checked === true) {
+											$('#page').val(null);
+											$('#loaiDayCode').val(
+													checkbox[i].value);
+											$('#formSubmit').submit();
+										}
+									}
+								};
+							</script>
+							<section class="sky-form">
+								<h4>Khoảng giá</h4>
+								<div class="row1 row2 scroll-pane">
+									<div class="col col-4" id="filterKhoangGia">
+										<label class="checkbox"> <input type="radio"
+											name="radioKhoangGia" value="all" checked="checked"><i></i><span>Tất
+												cả</span>
+										</label>
+										<th:block th:each="khoangGia : ${khoangGias}">
+											<label class="checkbox"> <input type="radio"
+												name="radioKhoangGia" th:value="${khoangGia.code}"
+												th:checked="(${khoangGiaCode} == ${khoangGia.code})"><i></i><span
+												th:utext="${khoangGia.name}"></span>
+											</label>
+										</th:block>
+									</div>
+								</div>
+							</section>
+							<script>
+								//Filter
+								document.getElementById("filterKhoangGia").onchange = function() {
+									var checkbox = document
+											.getElementsByName("radioKhoangGia");
+									for (var i = 0; i < checkbox.length; i++) {
+										if (checkbox[i].checked === true) {
+											$('#page').val(null);
+											$('#khoangGiaCode').val(
+													checkbox[i].value);
+											$('#formSubmit').submit();
+										}
+									}
+								};
+							</script>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--product-end-->
+		<!--information-starts-->
+	</div>
+
+</body>
+</html>

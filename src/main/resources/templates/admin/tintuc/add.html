@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Tin tức</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+<script th:src="@{ckeditor/ckeditor.js}"></script>
+<script th:src="@{ckfinder/ckfinder.js}"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý tin tức
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Thêm mới tin tức</h2>
+						</div>
+					</div>
+					<form class="form" id="formAddTinTuc">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="title" class="form-label">Tiêu đề</label> <input id="title" name="title" type="text"
+									placeholder="Tiêu đề" class="form-control"> <span
+									class="form-message" ></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="danhMuc">Thương hiệu:</label> <select
+									id="danhMuc" name="danhMuc" class="form-control">
+									<option value="">------CHỌN DANH MỤC-----</option>
+									<th:block th:each="danhMuc : ${danhMucs}">
+										<option th:value="${danhMuc}" th:utext="${danhMuc}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="logo" class="form-label">Logo :</label> <input id="logo" name="logo" type="file"
+									 class="form-control"> <span
+									class="form-message" ></span>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="shortDescription" class="form-label">Mô tả
+									ngắn</label>
+								<textarea class="form-control" rows="5" id="shortDescription"
+									name="shortDescription"></textarea>
+								<span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-12">
+								<label for="content" class="form-label">Nội dung</label> 
+									<textarea name="content" id="content"></textarea> 
+									<span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;">Thêm danh mục</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+		var data={};
+		var content='';
+		
+		$(document).ready(function(){
+			content = CKEDITOR.replace(
+					'content',
+					{
+						filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+						filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+						filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+						filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+						filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+						filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+					});
+		});
+		document.getElementById('logo').addEventListener('change', openFiles, false);
+		function openFiles(evt) {
+		    var files = evt.target.files;
+			var file = files[0],
+		    reader = new FileReader();
+		    reader.onload = (function (file) {
+		            return function (e) { 
+		            	var binaryData = this.result;
+		            	 data["bytes"] = window.btoa(binaryData);
+		            	 data["image"] = file.name;
+		            }
+		        })(file);
+
+		        reader.readAsBinaryString(file);
+		}
+			// Validate form 
+			Validator({
+				form : '#formAddTinTuc',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#title',
+								'Vui lòng không để trống !'),
+								Validator.isRequired('#danhMuc',
+								'Vui lòng không để trống !'),
+								Validator.isRequired('#logo',
+								'Vui lòng chọn ảnh !'),
+								Validator.isRequired('#shortDescription',
+								'Vui lòng không để trống !'),
+								Validator.isFileImage('#logo',
+								'Chọn đúng định dạng file ảnh !'),
+								
+						 ],
+				onSubmit : function(formdata) {
+			          formdata["bytes"] = data["bytes"];
+			          formdata["image"] = data["image"];
+			          formdata["content"] = content.getData();
+			          console.log(formdata);
+					   $
+							.ajax({
+								url : '/tinTucs',
+								type : 'POST',
+								contentType : 'application/json',
+								data : JSON.stringify(formdata),
+								dataType : 'json',
+								success : function(response) {
+									alert("Thêm tin tức thành công");
+									window.location.href = "/admin_listTinTuc";
+								},
+								error : function(response) {
+									window.location.href = "/admin_listTinTuc";
+									alert("Lỗi hệ thống");
+								}
+							});
+				}
+			});
+		</script>
+</body>
+</html>
+

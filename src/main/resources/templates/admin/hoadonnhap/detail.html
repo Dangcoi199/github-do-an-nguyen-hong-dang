@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Hóa đơn nhập</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+				<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 style="text-align: center;color: #1118ea;margin: 10px;">CHI TIẾT HÓA ĐƠN NHẬP</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="margin-left: 5%; font-size: 18px;color: #000; margin-top: 20px;">
+							<label>Nhà cung cấp :</label>
+							<span th:utext="${hoadonnhap.supplier.name}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="margin-left: 5%; font-size: 18px;color: #000;">
+							<label>Địa chỉ :</label>
+							<span th:utext="${hoadonnhap.supplier.address}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="margin-left: 5%; font-size: 18px;color: #000;">
+							<label>Số điện thoại :</label>
+							<span th:utext="${hoadonnhap.supplier.phone}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12" style="margin-left: 5%; font-size: 18px;color: #000; margin-bottom: 10px;">
+							<label>Email :</label>
+							<span th:utext="${hoadonnhap.supplier.email}"></span>
+						</div>
+					</div>
+					<hr>
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>STT</th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Đơn giá</th>
+									<th>Thành tiền</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>STT</th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Đơn giá</th>
+									<th>
+										<div >
+											<span>Tổng tiền: </span> <span
+												th:utext="${#numbers.formatDecimal(hoadonnhap.tongTien, 0, 'COMMA', 0, 'POINT')}"></span>
+											đ
+										</div>
+
+									</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="chitietHDN,state : ${hoadonnhap.chitietHDNs}">
+									<td th:utext="${state.count}"></td>
+									<td th:utext="${chitietHDN.product.name}"></td>
+									<td th:utext="${chitietHDN.soLuong}"></td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(chitietHDN.donGia, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(chitietHDN.thanhTien, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			
+		</script>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Sản phẩm</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+<link th:href="@{admin/css/addsanpham.css}" rel="stylesheet">
+<script th:src="@{ckeditor/ckeditor.js}"></script>
+<script th:src="@{ckfinder/ckfinder.js}"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/admin_index}">Dashboard</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/admin_listSanPham}">Danh sách sản phẩm</a></li>
+				<li class="breadcrumb-item active">Thêm mới sản phẩm</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý sản phẩm
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Thêm mới sản phẩm</h2>
+						</div>
+					</div>
+					<form class="form" id="formAddSanPham">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="form-label">Tên sản phảm</label> <input
+									id="name" name="name" type="text" placeholder="Tên sản phẩm"
+									class="form-control"> <span class="form-message"
+									id="messageName"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="logo" class="form-label">Ảnh :</label> <input
+									id="logo" type="file" class="form-control"> <span
+									class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="image_detail" class="form-label">Ảnh chi
+									tiết :</label> <input id="image_detail" type="file"
+									class="form-control" multiple="multiple"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<div class=" row">
+							<div class="form-group col-md-6">
+								<label for="brandCode">Thương hiệu:</label> <select
+									id="brandCode" name="brandCode" class="form-control">
+									<option value="">------CHỌN THƯƠNG HIỆU-----</option>
+									<th:block th:each="brand : ${brands}">
+										<option th:value="${brand.code}" th:utext="${brand.brandName}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="chatLieuMatCode">Chất liệu mặt:</label> <select
+									id="chatLieuMatCode" name="chatLieuMatCode"
+									class="form-control">
+									<option value="">------CHỌN CHẤT LIỆU MẶT-----</option>
+									<th:block th:each="chatLieuMat : ${chatLieuMats}">
+										<option th:value="${chatLieuMat.code}"
+											th:utext="${chatLieuMat.name}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="chatLieuVoCode">Chất liệu vỏ:</label> <select
+									id="chatLieuVoCode" name="chatLieuVoCode" class="form-control">
+									<option value="">------CHỌN CHẤT LIỆU VỎ-----</option>
+									<th:block th:each="chatlieuVo : ${chatlieuVos}">
+										<option th:value="${chatlieuVo.code}"
+											th:utext="${chatlieuVo.material}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="doChiuNuocCode">Độ chịu nước:</label> <select
+									id="doChiuNuoc" name="doChiuNuoc" class="form-control">
+									<option value="">------CHỌN ĐỘ CHỊU NƯỚC-----</option>
+									<th:block th:each="doChiuNuoc : ${doChiuNuocs}">
+										<option th:value="${doChiuNuoc}"
+											th:utext="${doChiuNuoc}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="duongKinhMatCode">Đường kính mặt:</label> <select
+									id="duongKinhMat" name="duongKinhMat"
+									class="form-control">
+									<option value="">------CHỌN ĐƯỜNG KÍNH MẶT-----</option>
+									<th:block th:each="duongKinh : ${duongKinhs}">
+										<option th:value="${duongKinh}"
+											th:utext="${duongKinh}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="kieuDongHoCode">Kiểu đồng hồ:</label> <select
+									id="kieuDongHoCode" name="kieuDongHoCode" class="form-control">
+									<option value="">------CHỌN KIỂU ĐỒNG HỒ-----</option>
+									<th:block th:each="kieuDH : ${kieuDHs}">
+										<option th:value="${kieuDH.code}" th:utext="${kieuDH.name}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class=" row">
+							<div class=" form-group col-md-6">
+								<label for="loaiDayCode">Loại dây:</label> <select
+									id="loaiDayCode" name="loaiDayCode" class="form-control">
+									<option value="">------CHỌN LOẠI DÂY-----</option>
+									<th:block th:each="loaiDay : ${loaiDays}">
+										<option th:value="${loaiDay.code}"
+											th:utext="${loaiDay.loaiDay}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class=" form-group col-md-6">
+								<label for="productTypeCode">Loại đồng hồ:</label> <select
+									id="productTypeCode" name="productTypeCode"
+									class="form-control">
+									<option value="">------CHỌN LOẠI ĐỒNG HỒ-----</option>
+									<th:block th:each="productType : ${productTypes}">
+										<option th:value="${productType.code}"
+											th:utext="${productType.typeName}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class=" form-group col-md-6">
+								<label for="baoHanhCode">Bảo hành:</label> <select
+									id="baoHanhCode" name="baoHanhCode"
+									class="form-control">
+									<option value="">------CHỌN BẢO HÀNH-----</option>
+									<th:block th:each="baoHanh : ${baoHanhs}">
+										<option th:value="${baoHanh.code}"
+											th:utext="${baoHanh.name}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="price" class="form-label">Giá sản phẩm
+									(VNĐ):</label> <input id="price" name="price" type="text"
+									placeholder="Nhập giá sản phẩm" class="form-control"> <span
+									class="form-message" ></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-12">
+								<label for="content" class="form-label">Nội dung</label> 
+									<textarea name="content" id="content"></textarea> 
+									<span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-7 row">
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="1"> <label
+										for="male" style="margin-top: 20px; margin-left: 10px;">Nam</label><br>
+								</div>
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="0"> <label
+										for="female" style="margin-top: 20px; margin-left: 10px;">Nữ</label><br>
+								</div>
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="-1"> <label
+										for="female" style="margin-top: 20px; margin-left: 10px;">Couple</label><br>
+								</div>
+							</div>
+
+						</div>
+
+
+
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Thêm sản phẩm</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			var data = {};
+			var arrayFiles = [];
+			var arrayFileNames = [];
+			var editor='';
+			
+			$(document).ready(function(){
+				editor = CKEDITOR.replace(
+						'content',
+						{
+							filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+							filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+							filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+							filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+							filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+							filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+						});
+			});
+
+			document.getElementById('image_detail').addEventListener('change',
+					openFilesMu, false);
+			function openFilesMu(evt) {
+				arrayFiles = [];
+				arrayFileNames = []
+				var files = evt.target.files;
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i], reader = new FileReader();
+					reader.onload = (function(file) {
+						return function(e) {
+							var binaryData = this.result;
+							arrayFiles.push(window.btoa(binaryData));
+							arrayFileNames.push(file.name);
+						}
+					})(file);
+
+					reader.readAsBinaryString(file);
+				}
+			}
+			////
+			document.getElementById('logo').addEventListener('change',
+					openFiles, false);
+			function openFiles(evt) {
+				var files = evt.target.files;
+				var file = files[0], reader = new FileReader();
+				reader.onload = (function(file) {
+					return function(e) {
+						var binaryData = this.result;
+						data["bytes"] = window.btoa(binaryData);
+						data["image"] = file.name;
+					}
+				})(file);
+
+				reader.readAsBinaryString(file);
+			}
+			// Validate form 
+			Validator({
+				form : '#formAddSanPham',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#name',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#logo', 'Vui lòng chọn ảnh !'),
+						Validator.isFileImage('#logo',
+						'Chọn đúng định dạng file ảnh !'),
+						Validator.isFileImage('#image_detail',
+						'Chọn đúng định dạng file ảnh !'),
+						Validator.isRequired('#brandCode',
+								'Vui lòng chọn thương hiệu !'),
+						Validator.isRequired('#chatLieuMatCode',
+								'Vui lòng chọn chất liệu mặt !'),
+						Validator.isRequired('#chatLieuVoCode',
+								'Vui lòng chọn chất liệu vỏ !'),
+						Validator.isRequired('#doChiuNuoc',
+								'Vui lòng chọn mức chịu nước !'),
+						Validator.isRequired('#duongKinhMat',
+								'Vui lòng chọn đường kính mặt !'),
+						Validator.isRequired('#kieuDongHoCode',
+								'Vui lòng chọn kiểu đồng hồ !'),
+						Validator.isRequired('#loaiDayCode',
+								'Vui lòng chọn loại dây !'),
+						Validator.isRequired('#productTypeCode',
+								'Vui lòng chọn loại đồng hồ !'),
+						Validator.isRequired('#price',
+								'Vui lòng nhập giá sản phẩm !'), ],
+				onSubmit : function(formdata) {
+					formdata["bytes"] = data["bytes"];
+					formdata["image"] = data["image"];
+					formdata["fileByteDetails"] = arrayFiles;
+					formdata["fileNameDetails"] = arrayFileNames;
+					formdata["content"] = editor.getData();
+					console.log(formdata);
+					$
+							.ajax({
+								url : '/sanphams',
+								type : 'POST',
+								contentType : 'application/json',
+								data : JSON.stringify(formdata),
+								dataType : 'json',
+								success : function(response) {
+									alert("Thêm sản phẩm thành công");
+									window.location.href = "/admin_listSanPham";
+								},
+								error : function(response) {
+									var data = JSON
+											.parse(response.responseText);
+									if (data.status == 400) {
+										document.getElementById("messageName").innerHTML = data.validationErrors.name;
+									} else {
+										window.location.href = "/admin_listSanPham";
+										alert(response);
+									}
+								}
+							});
+				}
+			});
+			
+		</script>
+</body>
+</html>
+

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Chi tiết sản phẩm</title>
+<script type="text/javascript"
+	th:src="@{pagination/jquery.twbsPagination.js}"></script>
+<link rel="stylesheet" th:href="@{web/css/flexslider.css}"
+	type="text/css" media="screen" />
+<link rel="stylesheet" th:href="@{web/css/productdetail.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{web/css/start_rating.css}"
+	type="text/css" />
+<link rel="stylesheet" th:href="@{web/bootstrap/css/bootstrap.min.css}"
+	type="text/css" />
+<script th:src="@{web/js/jquery.easydropdown.js}"></script>
+<script th:src="@{web/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+	function addItem(item) {
+		var data = $(item).val();
+		$.ajax({
+			url : '/add_item',
+			type : 'POST',
+			contentType : 'application/json',
+			data : JSON.stringify(data),
+			dataType : 'json',
+			success : function(response) {
+				window.location.href = "/";
+			},
+			error : function(response) {
+				alert("Lỗi hệ thống");
+			}
+		});
+	};
+</script>
+<script type="text/javascript">
+	function handleClickRadioStar(item) {
+		var star = $(item).val();
+		$("#starRating").val(star);
+		$("#sendRating").submit();
+	}
+	function handleClick(item) {
+		var star = $(item).val();
+		var product_id = $("#product_id").val();
+		$.post('/save_star?star=' + star + '&product_id=' + product_id);
+		location.reload()
+	}
+</script>
+
+<script type="text/javascript">
+	$(function() {
+
+		var menu_ul = $('.menu_drop > li > ul'), menu_a = $('.menu_drop > li > a');
+
+		menu_ul.hide();
+
+		menu_a.click(function(e) {
+			e.preventDefault();
+			if (!$(this).hasClass('active')) {
+				menu_a.removeClass('active');
+				menu_ul.filter(':visible').slideUp('normal');
+				$(this).addClass('active').next().stop(true, true).slideDown(
+						'normal');
+			} else {
+				$(this).removeClass('active');
+				$(this).next().stop(true, true).slideUp('normal');
+			}
+		});
+
+	});
+</script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main" style="font-size: 13px;">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li><a href="#">Chi tiết sản phẩm</a></li>
+						<li><a
+							th:href="@{/productByBrand(code=${product.brand.code},gender=${product.gender})}"
+							th:utext="${product.brand.brandName}"></a></li>
+						<li class="active" th:utext="${product.name}"></li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--start-single-->
+		<div class="single contact">
+			<div class="container">
+				<div class="single-main">
+					<div class="col-md-11 single-main-left">
+						<div class="sngl-top">
+							<div class="col-md-4 single-top-left">
+								<div class="flexslider">
+									<ul class="slides">
+										<li th:data-thumb="@{'/uploads/sanpham/'+${product.image}}">
+											<div class="thumb-image">
+												<img th:src="@{'/uploads/sanpham/'+${product.image}}"
+													data-imagezoom="true" class="img-responsive" alt="" />
+											</div>
+										</li>
+										<th:block th:each="image : ${product.imageDetails}">
+											<li
+												th:data-thumb="@{'/uploads/chitietanh/'+${image.imageName}}">
+												<div class="thumb-image">
+													<img th:src="@{'/uploads/chitietanh/'+${image.imageName}}"
+														data-imagezoom="true" class="img-responsive" alt="" />
+												</div>
+											</li>
+										</th:block>
+									</ul>
+								</div>
+								<!-- FlexSlider -->
+								<script th:src="@{web/js/imagezoom.js}"></script>
+								<script defer th:src="@{web/js/jquery.flexslider.js}"></script>
+
+
+								<script>
+									// Can also be used with $(document).ready()
+									$(window).load(function() {
+										$('.flexslider').flexslider({
+											animation : "slide",
+											controlNav : "thumbnails"
+										});
+									});
+								</script>
+							</div>
+							<div class="col-md-8 single-top-right">
+								<div class="single-para simpleCart_shelfItem">
+									<h2 th:utext="${product.name}"></h2>
+									<input type="hidden" th:value="${product.id}" id="product_id">
+									<div class="star-on">
+										<ul class="star-footer" th:if="${product.soSao} == 1">
+											<li><a><i> </i></a></li>										
+										</ul>
+										<ul class="star-footer" th:if="${product.soSao} == 2">
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>										
+										</ul>
+										<ul class="star-footer" th:if="${product.soSao} == 3">
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+										</ul>
+										<ul class="star-footer" th:if="${product.soSao} == 4">
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+										</ul>
+										<ul class="star-footer" th:if="${product.soSao} == 5">
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+											<li><a><i> </i></a></li>
+										</ul>
+										<div class="review">
+											<a
+												th:utext="'('+${product.customers_rating}+ ' người đánh giá )'">
+												1 customer review </a>
+
+										</div>
+									</div>
+									<div class="clearfix"></div>
+									<div class="fb-like"
+										data-href="https://developers.facebook.com/docs/plugins/"
+										data-width="" data-layout="standard" data-action="like"
+										data-size="small" data-share="true" style="margin-top: 15px;"></div>
+
+									<h5 class="item_price"></h5>
+									<div class="wrapper-info-pro cf">
+										<div class="left-info fl">
+											<ul>
+												<li class="cf">
+													<div class="li-left fl">Tình trạng</div> <span class="fl">:</span>
+													<th:block th:if="${product.quantity} == 0">
+														<div class="li-right fl">Hết hàng</div>
+													</th:block> <th:block th:unless="${product.quantity} == 0">
+														<div class="li-right fl">Còn hàng</div>
+													</th:block>
+
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Giới tính</div> <span
+													class="fl">:</span>
+													<div class="li-right fl" th:utext="${product.gender}"></div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Thương hiệu</div> <span
+													class="fl">:</span>
+													<div class="li-right fl">
+														<a th:utext="${product.brand.brandName}"
+															th:href="@{/productByBrand(code=${product.brand.code},gender=${product.gender})}"></a>
+													</div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Loại đồng hồ</div> <span
+													class="fl">:</span>
+													<div class="li-right fl">
+														<a th:utext="${product.productType.typeName}"
+															th:href="@{/productByProductType(code=${product.productType.code},gender=${product.gender})}"></a>
+													</div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Loại dây</div> <span
+													class="fl">:</span>
+													<div class="li-right fl">
+														<a th:utext="${product.loaiDay.loaiDay}"
+															th:href="@{/productByLoaiDay(code=${product.loaiDay.code},gender=${product.gender})}"></a>
+													</div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Kiểu đồng hồ</div> <span
+													class="fl">:</span>
+													<div class="li-right fl"
+														th:utext="${product.kieuDongHo.name}"></div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Độ chịu nước</div> <span
+													class="fl">:</span>
+													<div class="li-right fl" th:utext="${product.doChiuNuoc}"></div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Đường kính</div> <span
+													class="fl">:</span>
+													<div class="li-right fl" th:utext="${product.duongKinhMat}"></div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Chất liệu mặt</div> <span
+													class="fl">:</span>
+													<div class="li-right fl"
+														th:utext="${product.chatLieuMat.name}"></div>
+												</li>
+												<div class="clearfix"></div>
+												<li class="cf">
+													<div class="li-left fl off-ol3">Chất liệu vỏ</div> <span
+													class="fl">:</span>
+													<div class="li-right fl"
+														th:utext="${product.chatLieuVo.material}"></div>
+												</li>
+
+											</ul>
+										</div>
+										<div class="right-info fl">
+											<div class="bor-retails mt20">
+												<form class="cart420" action="#" method="post">
+													<th:block th:if="${product.priceSale}">
+														<div class="price-row cf">
+															<span class="fl">Giá niêm yết </span><span
+																class="price-cell-r old_price fl"
+																th:utext="(${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')">8.800.000
+																VNĐ</span>
+														</div>
+													</th:block>
+													<th:block th:unless="${product.priceSale}">
+														<div class="txt-price" style="margin-bottom: 20px;">
+															Giá niêm yết <span class="price-cell-r price basic_price"
+																th:utext="(${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+																style="margin-top: 10px;"></span> </span> <input type="hidden"
+																id="basic_price" value="7480000">
+														</div>
+													</th:block>
+													<div class="clearfix"></div>
+													<th:block th:if="${product.priceSale}">
+														<div class="txt-price">
+															Giá ưu đãi <span class="price-cell-r price basic_price"
+																style="margin-top: 10px;"> <span
+																th:utext="(${#numbers.formatDecimal(product.priceSale, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"></span>
+																<br> <th:block
+																	th:switch="${product.saleProduct.sale.name}">
+																	<span th:case="'Giảm giá 50%'">- 50%</span>
+																	<span th:case="'Giảm giá 40%'">- 40%</span>
+																	<span th:case="'Giảm giá 20%'">- 20%</span>
+																	<span th:case="'Giảm giá 30%'">- 30%</span>
+																	<span th:case="'Giảm giá 10%'">- 10%</span>
+																</th:block>
+															</span>
+														</div>
+														<div class="price-row">
+															<span class="price-cell-r">Tiết kiệm <span
+																th:utext="(${#numbers.formatDecimal(product.tietKiem, 0, 'COMMA', 0, 'POINT')} + ' đ')"></span></span>
+														</div>
+													</th:block>
+													<th:block th:if="${product.quantity} == 0">
+														<div id="buy-now" style="margin-right: 7%;">
+															<a class="bt-buy-sp buy-sp hethang sb-mr-b" href="#"
+																title="Mua ngay">Hết hàng</a> <a
+																class="bt-buy-sp buy-sp hethang sb-mr-b"
+																onclick="addToken(this)">Nhận thông báo khi có sản
+																phẩm</a>
+														</div>
+													</th:block>
+													<th:block th:unless="${product.quantity} == 0">
+														<div id="buy-now" style="margin-right: 7%;">
+															<a class="bt-buy-sp buy-sp submit sb-mr-b"
+																th:href="@{/buynow(id=${product.id})}" title="Mua ngay">Mua
+																ngay</a> <a class="bt-buy-sp buy-sp submit sb-mr-b" href="#">Trả
+																góp lãi suất 0%</a> <a
+																class="bt-buy-sp buy-sp submit sb-mr-b">Thanh toán
+																thẻ nội địa, IB và QRCODE</a>
+														</div>
+													</th:block>
+													<div class="txt-hotline-dl">
+														Hoặc mua hàng qua điện thoại <a class="hotline-dl"
+															href="tel:1800 6785" title="1800 6785">1800 6785</a>
+													</div>
+
+
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="clearfix"></div>
+						</div>
+						<th:block th:if="${sanPhamLienQuans}">
+							<div class="col-md-12 relativepro">
+								<div class="product_related_title" style="color: #662d91;">SẢN
+									PHẨM LIÊN QUAN</div>
+							</div>
+							<div class="latestproducts">
+								<div class="product-one">
+									<th:block th:each="sanPhamLienQuan : ${sanPhamLienQuans}">
+										<div class="col-md-3 product-left" style="margin-bottom: 3%;">
+											<div class="product-main simpleCart_shelfItem">
+												<a th:href="@{/productDetail(code=${sanPhamLienQuan.code})}"
+													class="mask"><img class="img-responsive zoom-img"
+													th:src="@{'/uploads/sanpham/'+${sanPhamLienQuan.image}}"
+													alt="" /></a>
+												<div class="product-bottom">
+													<h3 th:utext="${sanPhamLienQuan.name}" class="product_name"></h3>
+
+													<h5 style="margin-top: 20px;"
+														th:if="${sanPhamLienQuan.priceSale}">
+														<del
+															th:utext="${#numbers.formatDecimal(sanPhamLienQuan.price, 0, 'COMMA', 0, 'POINT')}"></del>
+														VNĐ
+													</h5>
+													<h4 style="margin-top: 15px;"
+														th:if="${sanPhamLienQuan.priceSale}">
+														<button class="item_add" th:value="${sanPhamLienQuan.id}"
+															style="background: #fff;" onclick="addItem(this)"
+															th:unless="${sanPhamLienQuan.quantity} == 0">
+															<i></i>
+														</button>
+														<span
+															th:utext="${#numbers.formatDecimal(sanPhamLienQuan.priceSale, 0, 'COMMA', 0, 'POINT')}"></span>
+														<span>VNĐ</span>
+													</h4>
+													<h4 style="margin-top: 35px;"
+														th:unless="${sanPhamLienQuan.priceSale}">
+														<button class="item_add" th:value="${sanPhamLienQuan.id}"
+															style="background: #fff;" onclick="addItem(this)"
+															th:unless="${sanPhamLienQuan.quantity} <= 0">
+															<i></i>
+														</button>
+														<span
+															th:utext="${#numbers.formatDecimal(sanPhamLienQuan.price, 0, 'COMMA', 0, 'POINT')}"></span>
+														<span>VNĐ</span>
+													</h4>
+												</div>
+												<th:block th:if="${sanPhamLienQuan.saleProduct}">
+													<div class="srch"
+														th:switch="${sanPhamLienQuan.saleProduct.sale.name}">
+														<span th:case="'Giảm giá 50%'">-50%</span> <span
+															th:case="'Giảm giá 40%'">-40%</span> <span
+															th:case="'Giảm giá 20%'">-20%</span> <span
+															th:case="'Giảm giá 30%'">-30%</span> <span
+															th:case="'Giảm giá 10%'">-10%</span>
+													</div>
+												</th:block>
+												<th:block th:unless="${sanPhamLienQuan.saleProduct}">
+													<div class="srch">
+														<span> NEW </span>
+													</div>
+												</th:block>
+
+											</div>
+										</div>
+									</th:block>
+									<div class="clearfix"></div>
+								</div>
+							</div>
+
+						</th:block>
+						<div class="navtabdetail" style="margin-top: 30px;">
+							<nav style="margin-bottom: 20px;">
+								<div class="nav nav-tabs" id="nav-tab" role="tablist">
+									<a class="nav-item nav-link active" id="nav-home-tab"
+										data-toggle="tab" href="#nav-home" role="tab"
+										aria-controls="nav-home" aria-selected="true"><h4>Chi
+											tiết sản phẩm</h4></a> <a class="nav-item nav-link"
+										id="nav-profile-tab" data-toggle="tab" href="#nav-profile"
+										role="tab" aria-controls="nav-profile" aria-selected="false"><h4>Bảo
+											hành</h4></a> <a class="nav-item nav-link" id="nav-contact-tab"
+										data-toggle="tab" href="#nav-contact" role="tab"
+										aria-controls="nav-contact" aria-selected="false"><h4>Hướng
+											dẫn sử dụng</h4></a> <a class="nav-item nav-link"
+										id="nav-comments-tab" data-toggle="tab" href="#nav-comments"
+										role="tab" aria-controls="nav-comments" aria-selected="false"><h4>Bình
+											luận & Đánh giá</h4></a>
+								</div>
+							</nav>
+							<div class="tab-content" id="nav-tabContent">
+								<div class="tab-pane fade show active" id="nav-home"
+									role="tabpanel" aria-labelledby="nav-home-tab">
+									<section th:utext="${product.content}"
+										style="font-size: 14px; color: #333; line-height: 25px;"></section>
+								</div>
+								<div class="tab-pane fade" id="nav-profile" role="tabpanel"
+									aria-labelledby="nav-profile-tab"
+									style="font-size: 14px; color: #333;">
+									<p style="color: #333; font-weight: 700;">Bảo hành quốc tế</p>
+									<span th:utext="${product.baohanh.name}"></span>
+									<p>&nbsp;</p>
+									<th:block th:replace="fragments/baohanh :: baohanh"></th:block>
+								</div>
+								<div class="tab-pane fade" id="nav-contact" role="tabpanel"
+									aria-labelledby="nav-contact-tab"
+									style="font-size: 14px; color: #333;">
+									<th:block th:replace="fragments/huongdan :: huongdan"></th:block>
+								</div>
+								<div class="tab-pane fade" id="nav-comments" role="tabpanel"
+									aria-labelledby="nav-comments-tab">
+									<div class="row">
+										<div class="col-md-2">
+											<form th:action="@{/save_rating}" method="get"
+												id="sendRating">
+												<input type="hidden" id="starRating" name="star" /> <input
+													type="hidden" name="product_id" th:value="${product.id}" />
+											</form>
+											<div class="rating" sec:authorize="isAnonymous()">
+												<input type="radio" name="rating" id="rating-5" th:value="5"
+													onclick="handleClickRadioStar(this)"> <label
+													for="rating-5"></label> <input type="radio" name="rating"
+													id="rating-4" th:value="4"
+													onclick="handleClickRadioStar(this)"> <label
+													for="rating-4"></label> <input type="radio" name="rating"
+													id="rating-3" th:value="3"
+													onclick="handleClickRadioStar(this)"> <label
+													for="rating-3"></label> <input type="radio" name="rating"
+													id="rating-2" th:value="2"
+													onclick="handleClickRadioStar(this)"> <label
+													for="rating-2"></label> <input type="radio" name="rating"
+													id="rating-1" th:value="1"
+													onclick="handleClickRadioStar(this)"> <label
+													for="rating-1"></label>
+											</div>
+
+											<div class="rating" sec:authorize="isAuthenticated()">
+												<input type="radio" name="rating" id="rating-5" th:value="5"
+													onclick="handleClick(this)"> <label for="rating-5"></label>
+												<input type="radio" name="rating" id="rating-4" th:value="4"
+													onclick="handleClick(this)"> <label for="rating-4"></label>
+												<input type="radio" name="rating" id="rating-3" th:value="3"
+													onclick="handleClick(this)"> <label for="rating-3"></label>
+												<input type="radio" name="rating" id="rating-2" th:value="2"
+													onclick="handleClick(this)"> <label for="rating-2"></label>
+												<input type="radio" name="rating" id="rating-1" th:value="1"
+													onclick="handleClick(this)"> <label for="rating-1"></label>
+											</div>
+										</div>
+									</div>
+									<div class="fb-comments"
+										th:data-href="'http://localhost:8088/productDetail?code='+${product.code}"
+										data-width="800" data-numposts="5"></div>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<!--end-single-->
+					<!--information-starts-->
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

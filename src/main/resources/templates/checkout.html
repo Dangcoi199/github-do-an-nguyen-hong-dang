@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Thanh toán</title>
+<style>
+.banner {
+	height: 300px;
+}
+
+.price {
+	color: #c4161c !important;
+	font-size: 18px !important;
+}
+
+.old_price {
+	color: #808080 !important;
+	font-size: 12px !important;
+	margin-right: 10px !important;
+	text-decoration: line-through !important;
+}
+
+.tiet_kiem {
+	color: #b80405 !important;
+	font-size: 12px !important;
+	font-weight: bold !important;
+}
+
+.form-message {
+	color: red;
+}
+</style>
+<script type="text/javascript" th:src="@{web/js/validator.js}"></script>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/trang-chu}">Trang chủ</a></li>
+						<li class="active">Thanh toán</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--start-ckeckout-->
+		<div class="ckeckout">
+			<div class="container">
+				<div class="ckeck-top heading">
+					<h2 style="color: #662d91;">THANH TOÁN</h2>
+				</div>
+				<div class="ckeckout-top">
+					<div class="cart-items">
+						<h3 th:utext="'Giỏ hàng ('+${size}+')'"></h3>
+
+						<div class="in-check">
+							<ul class="unit">
+								<li><span>Sản phẩm</span></li>
+								<li><span>Giá</span></li>
+								<li><span>Số lượng</span></li>
+								<li><span>Thành tiền</span></li>
+								<li></li>
+								<div class="clearfix"></div>
+							</ul>
+							<th:block th:each="item : ${cartItems}">
+								<ul class="cart-header">
+									<a class="close1"
+										th:href="@{/remove_item(id=${item.productId})}"></a>
+									<li class="ring-in"><a
+										th:href="@{/productDetail(code=${item.code})}"><img
+											th:src="@{'/uploads/sanpham/'+${item.image}}"
+											class="img-responsive" alt="" style="width: 50%;">
+											<p th:utext="${item.name}"></p> </a></li>
+									<li><th:block th:if="${item.tietKiem}">
+											<p>
+												<span class="price"
+													th:utext="(${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"></span>
+											</p>
+											<p>
+												<span class="old_price"
+													th:utext="(${#numbers.formatDecimal(item.niemYet, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"></span>
+											</p>
+											<p>
+												<span class="tiet_kiem"
+													th:utext="('Tiết kiệm : '+${#numbers.formatDecimal(item.tietKiem, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"></span>
+											</p>
+										</th:block> <th:block th:unless="${item.tietKiem}">
+											<span class="cost"
+												th:utext="(${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+												style="color: #c4161c;"></span>
+										</th:block></li>
+									<li><span class="cost" th:utext="${item.qty}"></span></li>
+									<li><span
+										th:utext="(${#numbers.formatDecimal(item.thanh_Tien, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+										class="cost"></span>
+										<p>Delivered in 2-3 business days</p></li>
+									<div class="clearfix"></div>
+								</ul>
+							</th:block>
+						</div>
+						<div class="row" th:unless="${size}==0">
+							<div class="col-md-6">
+							<div sec:authorize="isAnonymous()">
+								<a th:href="@{/checkout}" style="background-color: #652d92; color: #fff;" class="btn">Thanh toán</a>
+								<a th:href="@{/clear_cart}" class="btn btn-danger">Hủy đơn
+										hàng</a>
+							</div>
+							</div>
+							<div class="col-md-6">
+								<div style="float: right;">
+									<label style="font-size: 18px; margin-right: 10px;">Tổng
+										tiền :</label> <span
+										th:utext="(${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+										style="font-size: 18px;"></span>
+								</div>
+							</div>
+						</div>
+						<hr>
+					</div>
+				</div>
+				<th:block sec:authorize="isAuthenticated()">
+					<div class="row">
+						<div class="col-md-6">
+							<h3 style="margin-bottom: 5%; text-align: center;">THÔNG TIN
+								ĐẶT HÀNG</h3>
+						</div>
+					</div>
+					<form id="formAddOrder">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="col-md-3 col-form-label">Họ tên
+									<span style="color: red;">(*)</span>
+								</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="name" name="name">
+									<span class="form-message"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="email" class="col-md-3 col-form-label">Email
+									<span style="color: red;">(*)</span>
+								</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="email" name="email">
+									<span class="form-message"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="phone" class="col-md-3 col-form-label">SĐT <span
+									style="color: red;">(*)</span></label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" id="phone" name="phone">
+									<span class="form-message"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="address" class="col-md-3 col-form-label">Địa
+									chỉ <span style="color: red;">(*)</span>
+								</label>
+								<div class="col-md-9">
+									<textarea class="form-control" rows="3" id="address"
+										name="address"></textarea>
+									<span class="form-message"></span>
+								</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="ptThanhToan" class="col-md-3 col-form-label">
+									Thanh toán :</label>
+								<div class="col-md-6">
+									<select class="form-control" id="ptThanhToan"
+										name="ptThanhToan">
+										<option value="Thanh toán qua COD">Thanh toán qua COD</option>
+										<option value="Chuyển khoản">Chuyển khoản</option>
+									</select>
+								</div>
+
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="note" class="col-md-3 col-form-label">Ghi
+									chú:</label>
+								<div class="col-md-9">
+									<textarea class="form-control" rows="3" id="note" name="note"></textarea>
+								</div>
+
+							</div>
+						</div>
+						<input type="hidden" name="tongTien" th:value="${total}" />
+						<div class="row" style="margin-top: 10px;" th:unless="${size}==0">
+							<div class="col-md-6">
+								<div class="col-md-6" style="float: right;">
+									<button type="submit" class="btn btn-primary"
+										style="background: #662d91;">Gửi đơn hàng</button>
+									<a th:href="@{/clear_cart}" class="btn btn-danger">Hủy đơn
+										hàng</a>
+								</div>
+							</div>
+
+						</div>
+					</form>
+					<script type="text/javascript">
+						Validator({
+							form : '#formAddOrder',
+							formGroupSelect : '.form-group',
+							errorSelector : '.form-message',
+							rules : [
+									Validator.isRequired('#name',
+											'Vui lòng không để trống !'),
+									Validator.isRequired('#email',
+											'Vui lòng không để trống !'),
+									Validator.isRequired('#address',
+											'Vui lòng không để trống !'),
+									Validator.isRequired('#phone',
+											'Vui lòng không để trống !'),
+									Validator.isPhone('#phone', 10,
+											'Nhập đúng số điện thoại !'),
+									Validator.isMumber('#phone',
+											'Nhập đúng số điện thoại  !'),
+									Validator.isEmail('#email',
+											'Nhập đúng địa chỉ email  !'),
+
+							],
+							onSubmit : function(data) {
+								console.log(data);
+								$
+										.ajax({
+											url : '/add_order',
+											type : 'POST',
+											contentType : 'application/json',
+											data : JSON.stringify(data),
+											dataType : 'json',
+											success : function(response) {
+												window.location.href = "/order_success";
+											},
+											error : function(response) {
+												window.location.href = "/checkout";
+												alert("Lỗi hệ thống");
+											}
+										});
+							}
+						});
+					</script>
+				</th:block>
+
+
+			</div>
+		</div>
+		<!--end-ckeckout-->
+		<hr>
+	</div>
+
+</body>
+</html>

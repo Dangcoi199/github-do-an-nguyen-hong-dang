@@ -1,0 +1,73 @@
+<th:block xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
+	<!--information-starts-->
+	<div class="information">
+		<div class="container">
+			<hr>
+			<div class="infor-top">
+				<div class="col-md-3 infor-left">
+					<h3>Follow Us</h3>
+					<ul>
+						<li><a href="https://www.facebook.com/dang0599"><span class="fb"></span>
+								<h6>Facebook</h6></a></li>
+						<li><a href="#"><span class="twit"></span>
+								<h6>Twitter</h6></a></li>
+						<li><a href="#"><span class="google"></span>
+								<h6>Google+</h6></a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 infor-left">
+					<h3>Sản phẩm</h3>
+					<ul>
+						<li><a th:href="@{/phien-ban-dac_biet}"><p>Phiên bản đặc biệt</p></a></li>
+						<li><a th:href="@{/san-pham-moi}"><p>Sản phẩm mới</p></a></li>
+						<li><a th:href="@{/top-sellers}"><p>Top sellers</p></a></li>
+						<li><a th:href="@{/lien-he}"><p>Liên hệ</p></a></li>
+						<li sec:authorize="isAuthenticated()">
+							<a th:href="@{/lich-su-mua-hang}"><p>Lịch sử mua hàng</p></a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-3 infor-left">
+					<h3>Tin tức</h3>
+					<ul>
+						<li><a th:href="@{/tin-tuc-by-danh_muc(danhMuc='Tin tức')}"><p>Tin tức nổi bật</p></a></li>
+						<li><a th:href="@{/tin-tuc-by-danh_muc(danhMuc='Review sản phẩm')}"><p>Review sản phẩm</p></a></li>
+						<li><a th:href="@{/tin-tuc-by-danh_muc(danhMuc='Chứng nhận thương hiệu')}"><p>Chứng nhận thương hiệu</p></a></li>
+					</ul>
+				</div>
+				<div class="col-md-3 infor-left">
+					<h3>Thông tin liên hệ</h3>
+					<h4>
+						Luxury Watches, <span>41 Phố Thi Sách,</span> P. Phạm Đình Hổ, Q. Hai Bà Trưng, Hà Nội.
+					</h4>
+					<h5>0982.565.569</h5>
+					<p>
+						<a href="mailto:example@email.com">dinhdang0599@gmail.com</a>
+					</p>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--information-end-->
+	<!--footer-starts-->
+	<div class="footer">
+		<div class="container">
+			<div class="footer-top">
+				<div class="col-md-6 footer-left">
+					<form>
+						<input type="text" value="Enter Your Email"
+							onfocus="this.value = '';"
+							onblur="if (this.value == '') {this.value = 'Enter Your Email';}">
+						<input type="submit" value="Subscribe">
+					</form>
+				</div>
+				<div class="col-md-6 footer-right">
+					
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--footer-end-->
+</th:block>

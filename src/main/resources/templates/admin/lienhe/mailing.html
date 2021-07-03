@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Trả lời liên hệ</title>
+<script th:src="@{ckeditor/ckeditor.js}"></script>
+<script th:src="@{ckfinder/ckfinder.js}"></script>
+<style type="text/css">
+label {
+	font-weight: bold;
+}
+.contact-form button {
+	background: #25274d;
+	color: #fff;
+	font-weight: 600;
+	width: 25%;
+}
+
+.contact-form button:focus {
+	box-shadow: none;
+}
+</style>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="row" style="border: solid #ccc;">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-12">
+							<h3
+								style="margin-top: 20px; margin-left: 25px; text-align: center; color: red;">Thông
+								tin liên hệ</h3>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-12"
+									style="margin-left: 5%; margin-top: 20px; margin-bottom: 10px;">
+									<div class="row">
+										<div class="col-md-2">
+											<label>Họ tên :</label>
+										</div>
+										<div class="col-md-10">
+											<span th:utext="${lienHe.name}"></span>
+										</div>
+									</div>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12"
+									style="margin-left: 5%; margin-bottom: 10px;">
+									<div class="row">
+										<div class="col-md-2">
+											<label>SĐT :</label>
+										</div>
+										<div class="col-md-10">
+											<span th:utext="${lienHe.phone}"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12"
+									style="margin-left: 5%; margin-bottom: 10px;">
+									<div class="row">
+										<div class="col-md-2">
+											<label>Email :</label>
+										</div>
+										<div class="col-md-10">
+											<span th:utext="${lienHe.email}"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6"
+							style="margin-top: 15px; margin-bottom: 20px;">
+							<label>Nội dung :</label>
+							<textarea class="form-control" rows="5"
+								name="content" th:utext="${lienHe.content}" readonly></textarea>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div class="row" th:if="${lienHe.trangThai} == 'Chưa phản hồi'">
+				<div class="col-md-12" style="border-left: solid #ccc;">
+					<div class="row">
+						<div class="col-md-12">
+							<h3
+								style="text-align: center; margin-top: 20px; margin-left: 25px; color: #0e4dfe;">Phản
+								hồi</h3>
+						</div>
+					</div>
+					<hr>
+					<form id="formContact" class="contact-form">
+						<div class="form-group">
+							<label class="control-label" for="title">Tiêu đề:</label> <input
+								type="text" class="form-control" id="title"
+								placeholder="Nhập tiêu đề" name="title"> <span
+								class="form-message"></span>
+						</div>
+						<div class="form-group">
+							<label class="control-label" for="content">Nội dung:</label>
+							<textarea class="form-control" rows="5" id="content"></textarea>
+							<span class="form-message"></span>
+						</div>
+						<input type="hidden" th:value="${lienHe.id}" name="id">
+						<input type="hidden" th:value="${lienHe.email}" name="toEmail">
+						<div>
+							<button type="submit" class="btn btn-default">Gửi email</button>
+						</div>
+					</form>
+					<script type="text/javascript">
+						var editor = '';
+
+						$(document)
+								.ready(
+										function() {
+											editor = CKEDITOR
+													.replace(
+															'content',
+															{
+																filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+																filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+																filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+																filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+																filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+																filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+															});
+										});
+					</script>
+					<hr>
+				</div>
+			</div>
+			<script type="text/javascript">
+				// Validate form 
+				Validator({
+					form : '#formContact',
+					formGroupSelect : '.form-group',
+					errorSelector : '.form-message',
+					rules : [
+							Validator.isRequired('#title',
+									'Vui lòng không để trống !'),
+							 ],
+					onSubmit : function(data) {						
+						data["content"] = editor.getData();
+						console.log(data);
+						$
+								.ajax({
+									url : '/lienHes',
+									type : 'POST',
+									contentType : 'application/json',
+									data : JSON.stringify(data),
+									dataType : 'json',
+									success : function(response) {
+										alert("Thêm danh mục thành công");
+										window.location.href = "/admin_listChatLieuMat";
+									},
+									error : function(response) {
+										window.location.href = "/admin_listChatLieuMat";
+										alert("Lỗi hệ thống");
+									}
+								});
+					}
+				});
+			</script>
+		</div>
+</body>
+</html>
+

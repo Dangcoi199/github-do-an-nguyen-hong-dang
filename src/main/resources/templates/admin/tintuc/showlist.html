@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Tin tức</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+						<div class="col-md-6">
+						<button type="button" onclick="warningBeforeDelete()" data-toggle="tooltip" class="btn btn-danger" style="float: right; margin-left: 20px;">Xóa tin tức</button>
+							<a type="button" class="btn btn-success" style="float: right;" th:href="@{/admin_addTinTuc}">Thêm mới</a>
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Chọn<input type="checkbox" id="checkAll" style=" margin-left: 5px;"></th>
+									<th>Tiêu đề</th>
+									<th>Ảnh</th>
+									<th>Thao tác</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><input type="checkbox" id="checkAll1"></th>
+									<th>Tiêu đề</th>
+									<th>Ảnh</th>
+									<th>Thao tác</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="tinTuc : ${tinTucs}">
+									<td><input type="checkbox" th:id="'checkbox'+${tinTuc.id}" th:value="${tinTuc.id}" style="margin-left: -5px;"></td>
+									<td th:utext="${tinTuc.title}" ></td>
+									<td>
+										<img alt="áº¢nh" th:src="@{'/uploads/tintuc/'+${tinTuc.image}}" style="width: 120px; height: auto;">
+									</td>
+									<td>
+
+										<a class="btn btn-xs btn-info" th:href="@{/admin_updateTinTuc(id=${tinTuc.id})}">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</a>
+
+										<button class="btn btn-xs btn-danger" th:value="${tinTuc.id}" onclick="warningBeforeDeleteOne(this)">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</button>
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			$("#checkAll").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			$("#checkAll1").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			function warningBeforeDelete() {
+				swal({
+					title: "Bạn có muốn xóa?",
+					text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(
+						function(isConfirm) {
+							if (isConfirm) {
+								var ids = $('tbody input[type=checkbox]:checked')
+										.map(function() {
+											return $(this).val();
+										}).get();
+								deleteBrand(ids);
+							}
+						})
+			};
+			 function warningBeforeDeleteOne(item) {
+				swal({
+					title: "Bạn có muốn xóa ?",
+					  text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(function(isConfirm){
+					if(isConfirm){
+						var ids = $(item)
+								.map(function() {
+									return $(this).val();
+								}).get();					
+						deleteBrand(ids);
+					}
+				})
+			}; 
+			function deleteBrand(data) {
+				$.ajax({
+					url : '/tinTucs',
+					type : 'DELETE',
+	 				contentType : 'application/json',
+				    data : JSON.stringify(data), 
+					success : function(result) {
+						window.location.href = "/admin_listTinTuc";
+						swal({
+				              title: "Deleted!",
+				              text: "Your row has been deleted.",
+				              type: "success",
+				              timer: 100000
+				           });
+					},
+					error : function(error) {
+						window.location.href = "/admin_listTinTuc";
+						alert("Lỗi hệ thống");
+					}
+				})	
+			};
+		</script>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,202 @@
+<th:block xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	th:fragment="header">
+	<!--top-header-->
+	<div class="top-header">
+		<div class="container">
+			<div class="top-header-main">
+				<div class="col-md-6 top-header-left">
+					<div class="drop">
+						<div class="box">
+							<div class="fb-share-button" data-href="http://localhost:8088/"
+								data-layout="button" data-size="small">
+								<a target="_blank"
+									href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A8088%2F&amp;src=sdkpreparse"
+									class="fb-xfbml-parse-ignore">Chia sẻ</a>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+				<div class="col-md-6 top-header-left">
+					 <div id="authentication_app"
+						sec:authorize="isAnonymous()">
+						<a style="margin-right: 15px; color: #fff;" th:href="@{/login}">Đăng
+							nhập</a> <a style="color: #fff;" th:href="@{/register}">Đăng ký</a>
+					</div>
+					<div id="author_app"
+						sec:authorize="isAuthenticated()">
+						<a style="margin-right: 15px; color: #fff;">Xin chào :  <span
+							th:utext="${fullNameAccount}" id="username"></span></a> <a style="color: #fff;"
+							th:href="@{/logout}">Logout</a>
+					</div>
+					
+
+					<div class="cart box_1">
+						<a th:href="@{/showcart}">
+							<div class="total" th:unless="${cart_size} == 0">
+								<span th:utext="${cart_size}"></span>
+							</div> <img th:src="@{web/images/cart-1.png}" alt="" />
+						</a>
+						<p th:if="${cart_size} == 0">
+							<a href="javascript:;" class="simpleCart_empty">Empty Cart</a>
+						</p>
+						<div class="clearfix"></div>
+					</div>
+
+
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--top-header-->
+	<!--start-logo-->
+	<div class="logo">
+		<a th:href="@{/trang-chu}"><h1>Luxury Watches</h1></a>
+	</div>
+	<!--start-logo-->
+	<!--bottom-header-->
+	<div class="header-bottom">
+		<div class="container">
+			<div class="header">
+				<div class="col-md-9 header-left">
+					<div class="top-nav">
+						<ul class="memenu skyblue">
+							<li class="active"><a th:href="@{/}">Trang chủ</a></li>
+							<li class="grid"><a
+								th:href="@{/productByGender(gender='Nam')}">Đồng hồ nam</a>
+								<div class="mepanel" style="width: 100%">
+									<div class="row">
+										<div class="col1 me-one">
+											<h4>Thương hiệu</h4>
+											<ul th:each="brand : ${menu.brands}">
+												<li><a
+													th:href="@{/productByBrand(code=${brand.code},gender='Nam')}"
+													th:utext="${brand.brandName}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Mức giá</h4>
+											<ul th:each="khoangGia : ${menu.khoangGias}">
+												<li><a
+													th:href="@{/productByPrice(code=${khoangGia.code},gender='Nam')}"
+													th:utext="${khoangGia.name}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Loại đồng hồ</h4>
+											<ul th:each="loaiSp : ${menu.loaiSps}">
+												<li><a
+													th:href="@{/productByProductType(code=${loaiSp.code},gender='Nam')}"
+													th:utext="${loaiSp.typeName}">Titan</a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one loaiday">
+											<h4>Loại dây</h4>
+											<ul th:each="loaiDay : ${menu.loaiDays}">
+												<li><a
+													th:href="@{/productByLoaiDay(code=${loaiDay.code},gender='Nam')}"
+													th:utext="${loaiDay.loaiDay}"></a></li>
+											</ul>
+										</div>
+									</div>
+								</div></li>
+							<li class="grid"><a
+								th:href="@{/productByGender(gender='Nữ')}">Đồng hồ nữ</a>
+								<div class="mepanel" style="width: 100%">
+									<div class="row">
+										<div class="col1 me-one">
+											<h4>Thương hiệu</h4>
+											<ul th:each="brand : ${menu.brands}">
+												<li><a
+													th:href="@{/productByBrand(code=${brand.code},gender='Nữ')}"
+													th:utext="${brand.brandName}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Mức giá</h4>
+											<ul th:each="khoangGia : ${menu.khoangGias}">
+												<li><a
+													th:href="@{/productByPrice(code=${khoangGia.code},gender='Nữ')}"
+													th:utext="${khoangGia.name}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Loại đồng hồ</h4>
+											<ul th:each="loaiSp : ${menu.loaiSps}">
+												<li><a
+													th:href="@{/productByProductType(code=${loaiSp.code},gender='Nữ')}"
+													th:utext="${loaiSp.typeName}">Titan</a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one loaiday">
+											<h4>Loại dây</h4>
+											<ul th:each="loaiDay : ${menu.loaiDays}">
+												<li><a
+													th:href="@{/productByLoaiDay(code=${loaiDay.code},gender='Nữ')}"
+													th:utext="${loaiDay.loaiDay}"></a></li>
+											</ul>
+										</div>
+									</div>
+								</div></li>
+							<li class="grid"><a
+								th:href="@{/productByGender(gender='Đồng hồ đôi')}">Đồng hồ đôi</a>
+								<div class="mepanel" style="width: 100%">
+									<div class="row">
+										<div class="col1 me-one">
+											<h4>Thương hiệu</h4>
+											<ul th:each="brand : ${menu.brands}">
+												<li><a
+													th:href="@{/productByBrand(code=${brand.code},gender='Đồng hồ đôi')}"
+													th:utext="${brand.brandName}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Mức giá</h4>
+											<ul th:each="khoangGia : ${menu.khoangGias}">
+												<li><a
+													th:href="@{/productByPrice(code=${khoangGia.code},gender='Đồng hồ đôi')}"
+													th:utext="${khoangGia.name}"></a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one">
+											<h4>Loại đồng hồ</h4>
+											<ul th:each="loaiSp : ${menu.loaiSps}">
+												<li><a
+													th:href="@{/productByProductType(code=${loaiSp.code},gender='Đồng hồ đôi')}"
+													th:utext="${loaiSp.typeName}">Titan</a></li>
+											</ul>
+										</div>
+										<div class="col1 me-one loaiday">
+											<h4>Loại dây</h4>
+											<ul th:each="loaiDay : ${menu.loaiDays}">
+												<li><a
+													th:href="@{/productByLoaiDay(code=${loaiDay.code},gender='Đồng hồ đôi')}"
+													th:utext="${loaiDay.loaiDay}"></a></li>
+											</ul>
+										</div>
+									</div>
+								</div></li>
+							<li class="grid"><a th:href="@{/danh-muc-tin}">Tin tức</a></li>
+							<li class="grid"><a th:href="@{/lien-he}">Liên hệ</a></li>
+						</ul>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="col-md-3 header-right">
+					<div class="search-bar">
+						<form th:action="@{/searchProduct}" method="get">
+							<input type="text" value="Search" onfocus="this.value = '';"
+								onblur="if (this.value == '') {this.value = 'Search';}"
+								id="search" name="search"> <input type="submit" value=""
+								id="searchSubmit">
+						</form>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		</div>
+	</div>
+	<!--bottom-header-->
+</th:block>

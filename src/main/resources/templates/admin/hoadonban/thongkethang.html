@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Chi tiết hóa đơn</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 style="text-align: center; color: #1118ea; margin: 10px;">HÓA
+								ĐƠN BÁN THEO THÁNG</h3>
+						</div>
+					</div>
+					<div class="row" style="margin-top: 3%;">
+						<div class="col-md-6">
+							<form class="form" th:action="@{/admin_hoadonbanthang}" method="get">
+								<div class="row">
+									<div class="form-group col-md-12">
+										<label for="month_hdb" class="form-label">Chọn tháng:</label> <input
+											id="month_hdb" name="month_hdb" type="month"
+											class="form-control"> <span class="form-message"></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<button type="submit" class="btn btn-primary"
+											style="margin: 30px;" id="btnAddUser">Thêm mới</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<hr>
+					<div class="table-responsive" style="margin-top: 5%;">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Số hóa đơn</th>
+									<th>Ngày tạo</th>
+									<th>Khách hàng</th>
+									<th>Tổng tiền</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>Số hóa đơn</th>
+									<th>Ngày tạo</th>
+									<th>Khách hàng</th>
+									<th>
+										<div>
+											<span>Doanh thu: </span> <span
+												th:utext="${#numbers.formatDecimal(hoaDonBans.tongTien, 0, 'COMMA', 0, 'POINT')} + ' đ'" style="color: red;"></span>										
+										</div>
+									</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="hoaDonBan : ${hoaDonBans.hoaDonBans}">
+									<td><a th:href="@{/admin_detailHDB(id=${hoaDonBan.id})}">HĐB
+											<span th:utext="${hoaDonBan.id}"></span>
+									</a></td>
+									<td
+										th:utext="${#dates.format(hoaDonBan.createdDate, 'dd-MM-yyyy HH:mm')}"></td>
+									<td th:utext="${hoaDonBan.orderInfo.name}"></td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(hoaDonBan.orderInfo.tongTien, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			
+		</script>
+	</div>
+</body>
+</html>
+

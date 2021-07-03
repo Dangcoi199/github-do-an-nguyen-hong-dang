@@ -1,0 +1,23 @@
+i.fa.fa-thumbs-up {
+    font-size: 35px;
+    margin-left: 20px;
+   	color: blue;
+}
+
+i.fa.fa-thumbs-down {
+    font-size: 35px;
+    margin-left: 20px;
+    color: red;
+}
+
+tbody {
+    text-align: center;
+}
+
+thead {
+    text-align: center;
+}
+
+tfoot {
+    text-align: center;
+}

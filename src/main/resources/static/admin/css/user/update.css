@@ -1,0 +1,16 @@
+.formUpdate label {
+    color: #0c479e;
+    font-weight: bold;
+    font-size: 18px;
+}
+h2.headerUpdate {
+    color: #0c479e;
+    font-family:"Open Sans", sans-serif;
+    text-align: center;
+    margin: 10px;
+    font-size: 2rem;
+    margin-bottom: 5%;
+}
+.formUpdate {
+    margin: 20px;
+}

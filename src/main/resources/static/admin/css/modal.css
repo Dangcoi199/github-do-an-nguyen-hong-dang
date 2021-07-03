@@ -1,0 +1,8 @@
+a:hover {
+  background-color: #96c678;
+}
+.form-control:disabled, .form-control[readonly] {
+    opacity: 1;
+    background-color: #28a745;
+    color: #fff;
+}

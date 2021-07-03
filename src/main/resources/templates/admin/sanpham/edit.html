@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Sản phẩm</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+<script th:src="@{ckeditor/ckeditor.js}"></script>
+<script th:src="@{ckfinder/ckfinder.js}"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/admin_index}">Dashboard</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/admin_listSanPham}">Danh
+						sách sản phẩm</a></li>
+				<li class="breadcrumb-item active">Update sản phẩm</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý sản phẩm
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Cập nhật sản phẩm</h2>
+						</div>
+					</div>
+					<form class="form" id="formUpdateSanPham">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="brandName" class="form-label">Tên sản phẩm</label> <input
+									id="name" name="name" type="text"
+									placeholder="Nhập tên thương hiệu" class="form-control"
+									th:value="${product.name}"> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="logo" class="form-label">Ảnh :</label> <input
+									id="logo" type="file" class="form-control"> <span
+									class="form-message"></span>
+								<div class="row" style="margin-top: 20px;" id="imageUpdate">
+									<div class="col-md-4" th:if="${product.image}">
+										<img alt="Ảnh"
+											th:src="@{'/uploads/sanpham/'+${product.image}}"
+											style="width: 100%; height: auto;">
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="image_detail" class="form-label">Ảnh chi
+									tiết :</label> <input id="image_detail" type="file"
+									class="form-control" multiple="multiple"> <span
+									class="form-message"></span>
+								<div class="row" style="margin-top: 20px;"
+									id="imageDetailUpdate">
+									<div class="col-md-4"
+										th:each="imageDetail : ${product.imageDetails}">
+										<img alt="Detail"
+											th:src="@{'/uploads/chitietanh/'+${imageDetail.imageName}}"
+											style="width: 100%; height: auto;">
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class=" row">
+							<div class="form-group col-md-6">
+								<label for="brandCode">Thương hiệu:</label> <select
+									id="brandCode" name="brandCode" class="form-control">
+									<option value="">------CHỌN THƯƠNG HIỆU-----</option>
+									<th:block th:each="brand : ${brands}">
+										<th:block th:if="${product.brand}">
+											<option th:value="${brand.code}"
+												th:utext="${brand.brandName}"
+												th:selected="(${product.brand.code} == ${brand.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.brand}">
+											<option th:value="${brand.code}"
+												th:utext="${brand.brandName}"></option>
+										</th:block>
+
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="chatLieuMatCode">Chất liệu mặt:</label> <select
+									id="chatLieuMatCode" name="chatLieuMatCode"
+									class="form-control">
+									<option value="">------CHỌN CHẤT LIỆU MẶT-----</option>
+									<th:block th:each="chatLieuMat : ${chatLieuMats}">
+										<th:block th:if="${product.chatLieuMat}">
+											<option th:value="${chatLieuMat.code}"
+												th:utext="${chatLieuMat.name}"
+												th:selected="(${product.chatLieuMat.code} == ${chatLieuMat.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.chatLieuMat}">
+											<option th:value="${chatLieuMat.code}"
+												th:utext="${chatLieuMat.name}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="chatLieuVoCode">Chất liệu vỏ:</label> <select
+									id="chatLieuVoCode" name="chatLieuVoCode" class="form-control">
+									<option value="">------CHỌN CHẤT LIỆU VỎ-----</option>
+									<th:block th:each="chatlieuVo : ${chatlieuVos}">
+										<th:block th:if="${product.chatLieuVo}">
+											<option th:value="${chatlieuVo.code}"
+												th:utext="${chatlieuVo.material}"
+												th:selected="(${product.chatLieuVo.code} == ${chatlieuVo.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.chatLieuVo}">
+											<option th:value="${chatlieuVo.code}"
+												th:utext="${chatlieuVo.material}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="doChiuNuoc">Độ chịu nước:</label> <select
+									id="doChiuNuoc" name="doChiuNuocCode" class="form-control">
+									<option value="">------CHỌN ĐỘ CHỊU NƯỚC-----</option>
+									<th:block th:each="doChiuNuoc : ${doChiuNuocs}">
+										<th:block th:if="${product.doChiuNuoc}">
+											<option th:value="${doChiuNuoc}"
+												th:utext="${doChiuNuoc}"
+												th:selected="(${product.doChiuNuoc} == ${doChiuNuoc})"></option>
+										</th:block>
+										<th:block th:unless="${product.doChiuNuoc}">
+											<option th:value="${doChiuNuoc}"
+												th:utext="${doChiuNuoc}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="duongKinhMat">Đường kính mặt:</label> <select
+									id="duongKinhMat" name="duongKinhMatCode"
+									class="form-control">
+									<option value="">------CHỌN ĐƯỜNG KÍNH MẶT-----</option>
+									<th:block th:each="duongKinh : ${duongKinhs}">
+										<th:block th:if="${product.duongKinhMat}">
+											<option th:value="${duongKinh}"
+												th:utext="${duongKinh}"
+												th:selected="(${product.duongKinhMat} == ${duongKinh})"></option>
+										</th:block>
+										<th:block th:unless="${product.duongKinhMat}">
+											<option th:value="${duongKinh}"
+												th:utext="${duongKinh}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="kieuDongHoCode">Kiểu đồng hồ:</label> <select
+									id="kieuDongHoCode" name="kieuDongHoCode" class="form-control">
+									<option value="">------CHỌN KIỂU ĐỒNG HỒ-----</option>
+									<th:block th:each="kieuDH : ${kieuDHs}">
+										<th:block th:if="${product.kieuDongHo}">
+											<option th:value="${kieuDH.code}" th:utext="${kieuDH.name}"
+												th:selected="(${product.kieuDongHo.code} == ${kieuDH.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.kieuDongHo}">
+											<option th:value="${kieuDH.code}" th:utext="${kieuDH.name}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class=" row">
+							<div class=" form-group col-md-6">
+								<label for="loaiDayCode">Loại dây:</label> <select
+									id="loaiDayCode" name="loaiDayCode" class="form-control">
+									<option value="">------CHỌN LOẠI DÂY-----</option>
+									<th:block th:each="loaiDay : ${loaiDays}">
+										<th:block th:if="${product.loaiDay}">
+											<option th:value="${loaiDay.code}"
+												th:utext="${loaiDay.loaiDay}"
+												th:selected="(${product.loaiDay.code} == ${loaiDay.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.loaiDay}">
+											<option th:value="${loaiDay.code}"
+												th:utext="${loaiDay.loaiDay}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class=" form-group col-md-6">
+								<label for="productTypeCode">Loại đồng hồ:</label> <select
+									id="productTypeCode" name="productTypeCode"
+									class="form-control">
+									<option value="">------CHỌN LOẠI ĐỒNG HỒ-----</option>
+									<th:block th:each="productType : ${productTypes}">
+										<th:block th:if="${product.productType}">
+											<option th:value="${productType.code}"
+												th:utext="${productType.typeName}"
+												th:selected="(${product.productType.code} == ${productType.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.productType}">
+											<option th:value="${productType.code}"
+												th:utext="${productType.typeName}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class=" form-group col-md-6">
+								<label for="baoHanhCode">Bảo hành:</label> <select
+									id="baoHanhCode" name="baoHanhCode" class="form-control">
+									<option value="">------CHỌN BẢO HÀNH-----</option>
+									<th:block th:each="baoHanh : ${baoHanhs}">
+										<th:block th:if="${product.baohanh}">
+											<option th:value="${baoHanh.code}" th:utext="${baoHanh.name}"
+												th:selected="(${product.baohanh.code} == ${baoHanh.code})"></option>
+										</th:block>
+										<th:block th:unless="${product.baohanh}">
+											<option th:value="${baoHanh.code}" th:utext="${baoHanh.name}"></option>
+										</th:block>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="price" class="form-label">Giá sản phẩm
+									(VNĐ):</label> <input id="price" name="price" type="text"
+									placeholder="Nhập giá sản phẩm" class="form-control"
+									th:value="${product.price}"> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-12">
+								<label for="content" class="form-label">Nội dung</label>
+								<textarea name="content" id="content"
+									th:utext="${product.content}"></textarea>
+								<span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-7 row">
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="1"
+										th:checked="${product.gender == 'Nam'}"> <label
+										for="male" style="margin-top: 20px; margin-left: 10px;">Nam</label><br>
+								</div>
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="0"
+										th:checked="${product.gender == 'Nữ'}"> <label
+										for="female" style="margin-top: 20px; margin-left: 10px;">Nữ</label><br>
+								</div>
+								<div class="col-md-2">
+									<input type="radio" name="gender" value="-1"
+										th:checked="${product.gender == 'Đồng hồ đôi'}"> <label
+										for="female" style="margin-top: 20px; margin-left: 10px;">Couple</label><br>
+								</div>
+							</div>
+
+						</div>
+
+
+						<input type="hidden" th:value="${product.id}" id="idCate"
+							name="id">
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Lưu thay đổi</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			var data = {};
+			var arrayFiles = [];
+			var arrayFileNames = [];
+			var editor = '';
+
+			$(document)
+					.ready(
+							function() {
+								editor = CKEDITOR
+										.replace(
+												'content',
+												{
+													filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+													filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+													filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+													filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+													filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+													filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+												});
+							});
+
+			document.getElementById('image_detail').addEventListener('change',
+					openFilesMu, false);
+			function openFilesMu(evt) {
+				$("#imageDetailUpdate").hide();
+				arrayFiles = [];
+				arrayFileNames = []
+				var files = evt.target.files;
+				for (var i = 0; i < files.length; i++) {
+					var file = files[i], reader = new FileReader();
+					reader.onload = (function(file) {
+						return function(e) {
+							var binaryData = this.result;
+							arrayFiles.push(window.btoa(binaryData));
+							arrayFileNames.push(file.name);
+						}
+					})(file);
+
+					reader.readAsBinaryString(file);
+				}
+			}
+			////
+			document.getElementById('logo').addEventListener('change',
+					openFiles, false);
+			function openFiles(evt) {
+				$("#imageUpdate").hide();
+				var files = evt.target.files;
+				var file = files[0], reader = new FileReader();
+				reader.onload = (function(file) {
+					return function(e) {
+						var binaryData = this.result;
+						data["bytes"] = window.btoa(binaryData);
+						data["image"] = file.name;
+					}
+				})(file);
+
+				reader.readAsBinaryString(file);
+			}
+			// Validate form 
+			Validator({
+				form : '#formUpdateSanPham',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#name',
+								'Vui lòng không để trống !'),
+						Validator.isFileImage('#logo',
+								'Chọn đúng định dạng file ảnh !'),
+						Validator.isFileImage('#image_detail',
+								'Chọn đúng định dạng file ảnh !'),
+						Validator.isRequired('#brandCode',
+								'Vui lòng chọn thương hiệu !'),
+						Validator.isRequired('#chatLieuMatCode',
+								'Vui lòng chọn chất liệu mặt !'),
+						Validator.isRequired('#chatLieuVoCode',
+								'Vui lòng chọn chất liệu vỏ !'),
+						Validator.isRequired('#doChiuNuoc',
+								'Vui lòng chọn mức chịu nước !'),
+						Validator.isRequired('#duongKinhMat',
+								'Vui lòng chọn đường kính mặt !'),
+						Validator.isRequired('#kieuDongHoCode',
+								'Vui lòng chọn kiểu đồng hồ !'),
+						Validator.isRequired('#loaiDayCode',
+								'Vui lòng chọn loại dây !'),
+						Validator.isRequired('#productTypeCode',
+								'Vui lòng chọn loại đồng hồ !'),
+						Validator.isRequired('#price',
+								'Vui lòng nhập giá sản phẩm !'), ],
+				onSubmit : function(formdata) {
+					formdata["bytes"] = data["bytes"];
+					formdata["image"] = data["image"];
+					formdata["fileByteDetails"] = arrayFiles;
+					formdata["fileNameDetails"] = arrayFileNames;
+					formdata["content"] = editor.getData();
+					console.log(formdata);
+					$.ajax({
+						url : '/sanphams',
+						type : 'PUT',
+						contentType : 'application/json',
+						data : JSON.stringify(formdata),
+						dataType : 'json',
+						success : function(response) {
+							alert("Thêm sản phẩm thành công");
+							window.location.href = "/admin_listSanPham";
+						},
+						error : function(response) {
+							window.location.href = "/admin_listSanPham";
+							alert('Lỗi hệ thống !');
+						}
+					});
+				}
+			});
+		</script>
+</body>
+</html>
+

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Khuyến mại</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Khuyến mại
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Thêm khuyến mại</h2>
+						</div>
+					</div>
+					<form class="form" th:id="formAddSale">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="form-label">Tên sản phảm</label> <input
+									id="name" name="name" type="text" class="form-control"
+									disabled="disabled" th:value="${product.name}">
+							</div>
+						</div>
+						<div class=" row">
+							<div class="form-group col-md-6">
+								<label for="saleCode">Chương trình khuyến mại:</label> <select
+									id="saleCode" name="saleCode" class="form-control">
+									<option value="">------CHỌN CHƯƠNG TRÌNH-----</option>
+									<th:block th:each="saleEvent : ${saleEvents}">
+										<option th:value="${saleEvent.code}"
+											th:utext="${saleEvent.name}"></option>
+									</th:block>
+								</select> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-6">
+								<label for="price" class="form-label">Ngày bắt đầu:</label> <input
+									id="begin" name="begin" type="date" class="form-control">
+								<span class="form-message" id="messageBegin"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="price" class="form-label">Ngày kết thúc:</label> <input
+									id="end" name="end" type="date" class="form-control"> <span
+									class="form-message" id="messageEnd"></span>
+							</div>
+						</div>
+						<input type="hidden" th:value="${product.code}" id="productCode"
+							name="productCode">
+							<input type="hidden" th:value="${product.id}" id="productId"
+							name="productId">
+							<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Thêm mới</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			function submitFormSale() {
+				$("#formAddSale").submit();
+			}
+			Validator({
+				form : '#formAddSale',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#saleCode',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#begin',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#end',
+								'Vui lòng không để trống !'),
+						Validator
+								.isDateAfter(
+										'#end',
+										function() {
+											return document
+													.querySelector('#formAddSale #begin').value;
+										}, 'Ngày kết thúc sau ngày bắt đầu !'), ],
+				onSubmit : function(formdata) {
+					var validator=[];
+					var productId = formdata["productId"];
+					var beginDate =formdata["begin"];
+					validator.push(productId);
+					validator.push(beginDate);
+					formdata["validator"] = validator;
+					console.log(formdata);
+					 $
+							.ajax({
+								url : '/productSales',
+								type : 'POST',
+								contentType : 'application/json',
+								data : JSON.stringify(formdata),
+								dataType : 'json',
+								success : function(response) {
+									alert("Thêm thành công mã giảm giá !");
+									window.location.href = "/admin_listSanPham";
+								},
+								error : function(response) {
+									var data = JSON
+											.parse(response.responseText);
+									if (data.status == 400) {
+										if (data.validationErrors.begin != null) {
+											document
+													.getElementById("messageBegin").innerHTML = data.validationErrors.begin;
+										}
+										else if (data.validationErrors.end != null) {
+											document
+													.getElementById("messageEnd").innerHTML = data.validationErrors.end;
+										}
+										else if (data.validationErrors.validator != null) {
+											document
+													.getElementById("messageBegin").innerHTML = data.validationErrors.validator;
+										}
+
+									} else {
+										window.location.href = "/admin_listSanPham";
+										alert(response);
+									}
+								}
+							});
+				}
+			});
+		</script>
+</body>
+</html>
+

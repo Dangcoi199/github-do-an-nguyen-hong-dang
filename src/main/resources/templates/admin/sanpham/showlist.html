@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Sản phẩm</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<link th:href="@{admin/css/sanpham.css}" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/admin_index}">Dashboard</a></li>
+				<li class="breadcrumb-item active">Danh sách sản phẩm</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+						<div class="col-md-6">
+							<button type="button" onclick="warningBeforeDelete()"
+								data-toggle="tooltip" class="btn btn-danger"
+								style="float: right; margin-left: 20px;">Xóa sản phẩm</button>
+							<a type="button" class="btn btn-success" style="float: right;"
+								th:href="@{/admin_addSanPham}">Thêm mới</a>
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Chọn<input type="checkbox" id="checkAll"
+										style="margin-left: 5px;"></th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Giá (VNĐ)</th>
+									<th>Ảnh</th>
+									<th>Giảm giá</th>
+									<th>Trạng thái</th>
+									<th>Thao tác</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><input type="checkbox" id="checkAll1"></th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Giá (VNĐ)</th>
+									<th>Ảnh</th>
+									<th>Giảm giá</th>
+									<th>Trạng thái</th>
+									<th>Thao tác</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="product : ${products}">
+									<td><input type="checkbox"
+										th:id="'checkbox'+${product.id}" th:value="${product.id}"
+										style="margin-left: -5px;"></td>
+									<td th:utext="${product.name}" class="productName"></td>
+									<td th:utext="${product.quantity}"></td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+									<td><th:block th:if="${product.image}">
+											<a data-toggle="modal"
+												th:data-target="'#detailImages'+${product.id}"> <img
+												alt="Ảnh" th:src="@{'/uploads/sanpham/'+${product.image}}"
+												style="width: 120px; height: auto;">
+											</a>
+										</th:block> <th:block th:unless="${product.image}">
+											<span>Chưa có ảnh</span>
+										</th:block></td>
+									<td><th:block th:if="${product.saleProduct}">
+											<span th:utext="${product.saleProduct.sale.name}"
+												style="color: #c4161c;"></span>
+										</th:block> <th:block th:unless="${product.saleProduct}">
+											<span>Chưa có giảm giá</span>
+										</th:block></td>
+									<td><th:block th:if="${product.status} == 1">
+											<button style="border: none; background: none;" th:value="${product.id}" onclick="updateStatus(this)">
+												<i class="fa fa-thumbs-up"></i>
+											</button>
+
+										</th:block> <th:block th:if="${product.status} == 0">
+											<button style="border: none; background: none;" th:value="${product.id}" onclick="updateStatus(this)">
+												<i class="fa fa-thumbs-down"></i>
+											</button>
+										</th:block></td>
+									<td>
+										<button class="btn btn-xs btn-primary" data-toggle="modal"
+											th:data-target="'#detailProduct'+${product.id}">
+											<i class="fa fa-folder-open"></i>
+										</button> <a class="btn btn-xs btn-info"
+										th:href="@{/admin_updateSanPham(id=${product.id})}"> <i
+											class="ace-icon fa fa-pencil bigger-120"></i>
+									</a>
+
+										<button class="btn btn-xs btn-danger" th:value="${product.id}"
+											onclick="warningBeforeDeleteOne(this)">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</button> <a class="btn btn-xs btn-primary"
+										th:href="@{/admin_addProductSale(id=${product.id})}"> <i
+											class="fa fa-bookmark-o bigger-120"></i>
+									</a>
+									</td>
+									<!-- Begin Modal Detail Images -->
+									<div class="modal fade bd-example-modal-lg"
+										th:id="'detailImages'+${product.id}">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+
+												<!-- Modal Header -->
+												<div class="modal-header">
+													<h4 class="modal-title">Ảnh chi tiết</h4>
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+												</div>
+
+												<!-- Modal body -->
+												<div class="modal-body">
+													<img alt="Ảnh"
+														th:src="@{'/uploads/sanpham/'+${product.image}}"
+														style="width: 100%; height: auto;">
+												</div>
+
+												<!-- Modal footer -->
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger"
+														data-dismiss="modal">Close</button>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!-- End modal Detail Images -->
+
+									<!-- Begin Modal Product Detail -->
+									<div class="modal fade bd-example-modal-lg"
+										th:id="'detailProduct'+${product.id}">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+
+												<!-- Modal Header -->
+												<div class="modal-header">
+													<h4 class="modal-title">Chi tiết sản phẩm</h4>
+													<button type="button" class="close" data-dismiss="modal">&times;</button>
+												</div>
+
+												<!-- Modal body -->
+												<div class="modal-body">
+													<div class="row">
+														<div class="form-group col-md-12">
+															<label for="name">Tên sản phẩm:</label> <span id="name"
+																th:utext="${product.name}"></span>
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="quantity"> Số lượng:</label> <span
+																id="quantity" th:utext="${product.quantity}"></span> <span>sản
+																phẩm</span>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="price">Giá:</label>
+															<th:block th:if="${product.price}">
+																<span id="price"
+																	th:utext="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span>
+																<span>VNĐ</span>
+															</th:block>
+															<th:block th:unless="${product.price}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="productType">Loại đồng hồ:</label>
+															<th:block th:if="${product.productType}">
+																<span id="productType"
+																	th:utext="${product.productType.typeName}"></span>
+															</th:block>
+															<th:block th:unless="${product.productType}">
+																<span>Chưa có</span>
+															</th:block>
+														</div>
+
+														<div class="form-group col-md-6">
+															<label for="brand">Thương hiệu:</label>
+															<th:block th:if="${product.brand}">
+																<span id="brand" th:utext="${product.brand.brandName}"></span>
+															</th:block>
+															<th:block th:unless="${product.brand}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="chatLieuMat">Chất liệu mặt:</label>
+															<th:block th:if="${product.chatLieuMat}">
+																<span id="chatLieuMat"
+																	th:utext="${product.chatLieuMat.name}"></span>
+															</th:block>
+															<th:block th:unless="${product.chatLieuMat}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+														<div class="form-group col-md-6">
+															<label for="chatLieuVo">Chất liệu vỏ:</label>
+															<th:block th:if="${product.chatLieuVo}">
+																<span id="chatLieuVo"
+																	th:utext="${product.chatLieuVo.material}"></span>
+															</th:block>
+															<th:block th:unless="${product.chatLieuVo}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="doChiuNuoc">Độ chịu nước:</label>
+															<th:block th:if="${product.doChiuNuoc}">
+																<span id="doChiuNuoc"
+																	th:utext="${product.doChiuNuoc}"></span>
+															
+															</th:block>
+															<th:block th:unless="${product.doChiuNuoc}">
+																<span>Chưa có</span>
+															</th:block>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="duongKinhMat">Đường kính mặt:</label>
+															<th:block th:if="${product.duongKinhMat}">
+																<span id="duongKinhMat"
+																	th:utext="${product.duongKinhMat}"></span>
+															
+															</th:block>
+															<th:block th:unless="${product.duongKinhMat}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="kieuDongHo">Kiểu đồng hồ:</label>
+															<th:block th:if="${product.kieuDongHo}">
+																<span id="kieuDongHo"
+																	th:utext="${product.kieuDongHo.name}"></span>
+															</th:block>
+															<th:block th:unless="${product.kieuDongHo}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+														<div class="form-group col-md-6">
+															<label for="loaiDay">Loại dây:</label>
+															<th:block th:if="${product.loaiDay}">
+																<span id="loaiDay" th:utext="${product.loaiDay.loaiDay}"></span>
+															</th:block>
+															<th:block th:unless="${product.loaiDay}">
+																<span>Chưa có</span>
+															</th:block>
+
+
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="gender"> Giới tính:</label>
+															<th:block th:if="${product.gender}">
+																<span id="gender" th:utext="${product.gender}"></span>
+															</th:block>
+															<th:block th:unless="${product.gender}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+														<div class="form-group col-md-6">
+															<label for="baohanh"> Bảo hành:</label>
+															<th:block th:if="${product.baohanh}">
+																<span id="baohanh" th:utext="${product.baohanh.name}"></span>
+															</th:block>
+															<th:block th:unless="${product.gender}">
+																<span>Chưa có</span>
+															</th:block>
+
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="createdBy">Người tạo:</label> <span
+																id="createdBy" th:utext="${product.createdBy}"></span>
+														</div>
+														<div class="form-group col-md-6">
+															<label for="createdDate">Ngày tạo:</label> <span
+																id="createdDate"
+																th:utext="${#dates.format(product.createdDate, 'dd-MM-yyyy')}"></span>
+														</div>
+													</div>
+													<div class="row">
+														<div class="form-group col-md-6">
+															<label for="showDetail">Lượt xem :</label> <span
+																id="showDetail" th:utext="${product.showDetail}"></span>
+															<span>lượt</span>
+														</div>
+													</div>
+												</div>
+
+												<!-- Modal footer -->
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger"
+														data-dismiss="modal">Close</button>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!-- End modal Product Detail -->
+
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			$("#checkAll").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			$("#checkAll1").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			function warningBeforeDelete() {
+				swal({
+					title : "Bạn có muốn xóa?",
+					text : "Bạn có chắc chắn muốn xóa ?",
+					icon : "warning",
+					buttons : true,
+					dangerMode : true,
+				}).then(
+						function(isConfirm) {
+							if (isConfirm) {
+								var ids = $(
+										'tbody input[type=checkbox]:checked')
+										.map(function() {
+											return $(this).val();
+										}).get();
+								deleteSanPham(ids);
+							}
+						})
+			};
+			function warningBeforeDeleteOne(item) {
+				swal({
+					title : "Bạn có muốn xóa ?",
+					text : "Bạn có chắc chắn muốn xóa ?",
+					icon : "warning",
+					buttons : true,
+					dangerMode : true,
+				}).then(function(isConfirm) {
+					if (isConfirm) {
+						var ids = $(item).map(function() {
+							return $(this).val();
+						}).get();
+						deleteSanPham(ids);
+					}
+				})
+			};
+			function deleteSanPham(data) {
+				$.ajax({
+					url : '/sanphams',
+					type : 'DELETE',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					success : function(result) {
+						window.location.href = "/admin_listSanPham";
+						swal({
+							title : "Deleted!",
+							text : "Your row has been deleted.",
+							type : "success",
+							timer : 100000
+						});
+					},
+					error : function(error) {
+						window.location.href = "/admin_listSanPham";
+						alert("Lỗi hệ thống");
+					}
+				})
+			};
+			function updateStatus(item){
+				var data= $(item).val();
+				$.ajax({
+					url : '/updateProductStatus',
+					type : 'PUT',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					success : function(result) {
+						alert("Update thành công");
+						window.location.href = "/admin_listSanPham";
+					},
+					error : function(error) {
+						window.location.href = "/admin_listSanPham";
+						alert("Lỗi hệ thống");
+					}
+				})
+			}
+		</script>
+	</div>
+</body>
+</html>
+

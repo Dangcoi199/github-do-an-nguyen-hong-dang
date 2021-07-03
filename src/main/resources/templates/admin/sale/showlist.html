@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Khuyến mại</title>
+<link th:href="@{admin/css/modal.css}" rel="stylesheet">
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/admin_index}">Dashboard</a></li>
+				<li class="breadcrumb-item active">Khuyến mại</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+						<div class="col-md-6">
+						<button type="button" onclick="warningBeforeDelete()" data-toggle="tooltip" class="btn btn-danger" style="float: right; margin-left: 20px;">Xóa khuyến mại</button>
+							<a type="button" class="btn btn-success" style="float: right;" th:href="@{/addSale}">Thêm mới</a>
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Chọn<input type="checkbox" id="checkAll" style=" margin-left: 5px;"></th>
+									<th>Tên chương trình</th>
+									<th>Thao tác</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><input type="checkbox" id="checkAll1"></th>
+									<th>Tên chương trình</th>
+									<th>Thao tác</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="sale : ${sales}">
+									<td><input type="checkbox" th:id="'checkbox'+${sale.id}" th:value="${sale.id}" style="margin-left: -5px;"></td>
+									<td th:utext="${sale.name}"></td>
+									<td>
+
+										<a class="btn btn-xs btn-info" th:href="@{/updateSale(id=${sale.id})}">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</a>
+
+										<button class="btn btn-xs btn-danger" th:value="${sale.id}" onclick="warningBeforeDeleteOne(this)">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</button>
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			$("#checkAll").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			$("#checkAll1").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			function warningBeforeDelete() {
+				swal({
+					title: "Bạn có muốn xóa?",
+					text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(
+						function(isConfirm) {
+							if (isConfirm) {
+								var ids = $('tbody input[type=checkbox]:checked')
+										.map(function() {
+											return $(this).val();
+										}).get();
+								deleteSale(ids);
+							}
+						})
+			};
+			 function warningBeforeDeleteOne(item) {
+				swal({
+					title: "Bạn có muốn xóa ?",
+					  text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(function(isConfirm){
+					if(isConfirm){
+						var ids = $(item)
+								.map(function() {
+									return $(this).val();
+								}).get();					
+						deleteSale(ids);
+					}
+				})
+			}; 
+			function deleteSale(data) {
+				$.ajax({
+					url : '/sales',
+					type : 'DELETE',
+	 				contentType : 'application/json',
+				    data : JSON.stringify(data), 
+					success : function(result) {
+						window.location.href = "/listSale";
+						swal({
+				              title: "Deleted!",
+				              text: "Your row has been deleted.",
+				              type: "success",
+				              timer: 100000
+				           });
+					},
+					error : function(error) {
+						window.location.href = "/listSale";
+						alert("Lỗi hệ thống");
+					}
+				})	
+			};
+		</script>
+	</div>
+</body>
+</html>
+

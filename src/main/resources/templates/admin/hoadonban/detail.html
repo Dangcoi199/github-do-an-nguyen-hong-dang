@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Chi tiết hóa đơn</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 style="text-align: center; color: #1118ea; margin: 10px;">CHI TIẾT HÓA ĐƠN BÁN</h3>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12"
+							style="margin-left: 5%; font-size: 18px; color: #000; margin-top: 20px;">
+							<label>Họ tên:</label> <span th:utext="${hoaDonBan.orderInfo.name}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12"
+							style="margin-left: 5%; font-size: 18px; color: #000;">
+							<label>Địa chỉ :</label> <span th:utext="${hoaDonBan.orderInfo.address}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12"
+							style="margin-left: 5%; font-size: 18px; color: #000;">
+							<label>Số điện thoại :</label> <span
+								th:utext="${hoaDonBan.orderInfo.phone}"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12"
+							style="margin-left: 5%; font-size: 18px; color: #000; margin-bottom: 10px;">
+							<label>Email :</label> <span th:utext="${hoaDonBan.orderInfo.email}"></span>
+						</div>
+					</div>
+					<hr>
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>STT</th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Đơn giá</th>
+									<th>Thành tiền</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>STT</th>
+									<th>Tên sản phẩm</th>
+									<th>Số lượng</th>
+									<th>Đơn giá</th>
+									<th>
+										<div>
+											<span>Tổng tiền: </span> <span
+												th:utext="${#numbers.formatDecimal(hoaDonBan.orderInfo.tongTien, 0, 'COMMA', 0, 'POINT')}"></span>
+											đ
+										</div>
+
+									</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="orderDetail,state : ${hoaDonBan.orderInfo.orderDetails}">
+									<td th:utext="${state.count}"></td>
+									<td><a data-toggle="modal"
+										th:data-target="'#productDetail'+${orderDetail.productId}"
+										style="color: #0f69cb;" th:utext="${orderDetail.name}"></a></td>
+									<td th:utext="${orderDetail.soLuong}"></td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(orderDetail.price, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+									<td><span
+										th:utext="${#numbers.formatDecimal(orderDetail.thanhTien, 0, 'COMMA', 0, 'POINT')}"></span>
+										đ</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- Begin Modal Product Detail -->
+				<th:block th:each="product : ${products}">
+					<div class="modal fade bd-example-modal-lg"
+						th:id="'productDetail'+${product.id}">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+
+								<!-- Modal Header -->
+								<div class="modal-header">
+									<h4 class="modal-title">Chi tiết sản phẩm</h4>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+								</div>
+
+								<!-- Modal body -->
+								<div class="modal-body">
+									<div class="row">
+										<div class="form-group col-md-12">
+											<img th:src="@{'/uploads/sanpham/'+${product.image}}" alt=""
+												style="width: 30%; height: auto;" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="quantity"> Số lượng:</label> <span id="quantity"
+												th:utext="${product.quantity}"></span> <span>sản phẩm</span>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="price">Giá:</label>
+											<th:block th:if="${product.price}">
+												<span id="price"
+													th:utext="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></span>
+												<span>VNĐ</span>
+											</th:block>
+											<th:block th:unless="${product.price}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="productType">Loại đồng hồ:</label>
+											<th:block th:if="${product.productType}">
+												<span id="productType"
+													th:utext="${product.productType.typeName}"></span>
+											</th:block>
+											<th:block th:unless="${product.productType}">
+												<span>Chưa có</span>
+											</th:block>
+										</div>
+
+										<div class="form-group col-md-6">
+											<label for="brand">Thương hiệu:</label>
+											<th:block th:if="${product.brand}">
+												<span id="brand" th:utext="${product.brand.brandName}"></span>
+											</th:block>
+											<th:block th:unless="${product.brand}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="chatLieuMat">Chất liệu mặt:</label>
+											<th:block th:if="${product.chatLieuMat}">
+												<span id="chatLieuMat"
+													th:utext="${product.chatLieuMat.name}"></span>
+											</th:block>
+											<th:block th:unless="${product.chatLieuMat}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+										<div class="form-group col-md-6">
+											<label for="chatLieuVo">Chất liệu vỏ:</label>
+											<th:block th:if="${product.chatLieuVo}">
+												<span id="chatLieuVo"
+													th:utext="${product.chatLieuVo.material}"></span>
+											</th:block>
+											<th:block th:unless="${product.chatLieuVo}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="doChiuNuoc">Độ chịu nước:</label>
+											<th:block th:if="${product.doChiuNuoc}">
+												<span id="doChiuNuoc" th:utext="${product.doChiuNuoc}"></span>
+															
+															</th:block>
+											<th:block th:unless="${product.doChiuNuoc}">
+												<span>Chưa có</span>
+											</th:block>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="duongKinhMat">Đường kính mặt:</label>
+											<th:block th:if="${product.duongKinhMat}">
+												<span id="duongKinhMat"
+													th:utext="${product.duongKinhMat}"></span>
+											</th:block>
+											<th:block th:unless="${product.duongKinhMat}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="kieuDongHo">Kiểu đồng hồ:</label>
+											<th:block th:if="${product.kieuDongHo}">
+												<span id="kieuDongHo" th:utext="${product.kieuDongHo.name}"></span>
+											</th:block>
+											<th:block th:unless="${product.kieuDongHo}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+										<div class="form-group col-md-6">
+											<label for="loaiDay">Loại dây:</label>
+											<th:block th:if="${product.loaiDay}">
+												<span id="loaiDay" th:utext="${product.loaiDay.loaiDay}"></span>
+											</th:block>
+											<th:block th:unless="${product.loaiDay}">
+												<span>Chưa có</span>
+											</th:block>
+
+
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="gender"> Giới tính:</label>
+											<th:block th:if="${product.gender}">
+												<span id="gender" th:utext="${product.gender}"></span>
+											</th:block>
+											<th:block th:unless="${product.gender}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+										<div class="form-group col-md-6">
+											<label for="baohanh"> Bảo hành:</label>
+											<th:block th:if="${product.baohanh}">
+												<span id="baohanh" th:utext="${product.baohanh.name}"></span>
+											</th:block>
+											<th:block th:unless="${product.gender}">
+												<span>Chưa có</span>
+											</th:block>
+
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="createdBy">Người tạo:</label> <span
+												id="createdBy" th:utext="${product.createdBy}"></span>
+										</div>
+										<div class="form-group col-md-6">
+											<label for="createdDate">Ngày tạo:</label> <span
+												id="createdDate"
+												th:utext="${#dates.format(product.createdDate, 'dd-MM-yyyy')}"></span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="showDetail">Lượt xem :</label> <span
+												id="showDetail" th:utext="${product.showDetail}"></span> <span>lượt</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Modal footer -->
+								<div class="modal-footer">
+									<button type="button" class="btn btn-danger"
+										data-dismiss="modal">Close</button>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</th:block>
+
+
+				<!-- End modal Product Detail -->
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			
+		</script>
+	</div>
+</body>
+</html>
+

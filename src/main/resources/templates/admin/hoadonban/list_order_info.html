@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Bảo hành</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Thông tin đặt hàng
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Họ tên</th>
+									<th>SĐT</th>
+									<th>Email</th>
+									<th>Trạng thái</th>
+									<th>Tổng tiền</th>
+									<th>Thao tác</th>
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th>Họ tên</th>
+									<th>SĐT</th>
+									<th>Email</th>
+									<th>Trạng thái</th>
+									<th>Tổng tiền</th>
+									<th>Thao tác</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="orderInfo : ${orderInfos}">
+									<td th:utext="${orderInfo.name}"></td>
+									<td th:utext="${orderInfo.phone}"></td>
+									<td th:utext="${orderInfo.email}"></td>
+									<td>
+										<p th:if="${orderInfo.trangThai} == 'Chờ xác nhận'"
+											th:utext="${orderInfo.trangThai}" style="color: red;"></p>
+										<p th:if="${orderInfo.trangThai} == 'Thành công'"
+											th:utext="${orderInfo.trangThai}" style="color: #06a428;"></p>
+										<p th:if="${orderInfo.trangThai} == 'Không thành công'"
+											th:utext="${orderInfo.trangThai}"></p>
+									</td>
+									<td
+										th:utext="${#numbers.formatDecimal(orderInfo.tongTien, 0, 'COMMA', 0, 'POINT')}+ ' đ'"></td>
+									<td><a class="btn btn-xs btn-info"
+										th:href="@{/admin_orderDetail(id=${orderInfo.id})}"> <i
+											class="fa fa-folder-open bigger-120"></i>
+									</a></td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Tin tức</title>
+<link th:href="@{web/css/tintuc.css}" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.title_tintuc a {
+    font-size: 16px;
+    font-family: UTMAvoBold;
+    text-align: center;
+    display: inline-block;
+    line-height: 24px;
+    margin: 10px 0;
+    padding: 0 20px;
+    height: 75px;
+    overflow: hidden;
+    color: #000;
+    text-decoration: none;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!--start-breadcrumbs-->
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main" style="font-size: 13px;">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li class="active">Tin tức</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-9">
+					<h2
+						style="margin-top: 3%; font-family: Arial; margin-bottom: 2%; color: #414c5c; margin-left: 10px;">
+						<span th:utext="${tinTuc.title}"
+							style="font-size: 30px; line-height: 36px;"></span>
+					</h2>
+					<div class="clock">
+						<span class="datetime"
+							th:utext="${#dates.format(tinTuc.createdDate, 'dd-MM-yyyy')}"></span>
+						<span class="sepa">-</span> <span class="hit"
+							th:utext="'Lượt xem : '+${tinTuc.showDetail}"></span>
+						<div style="float: right; margin-right: 8%;">
+							<div class="fb-like"
+								data-href="https://developers.facebook.com/docs/plugins/"
+								data-width="" data-layout="button" data-action="like"
+								data-size="small" data-share="true"></div>
+						</div>
+
+
+					</div>
+					<div class="clear"></div>
+					<div style="margin-left: 10px;">
+						<section th:utext="${tinTuc.content}" id="content"></section>
+					</div>
+					<p><span style="font-size:16px;">-----------------------------------------------------------</span></p>
+						<p>
+							<span style="font-size: 16px;">Để được tư vấn cụ
+								thể,&nbsp;Quý khách hàng liên hệ tới <a href="https://galle.vn/"
+								target="_blank">Luxury Watches</a> qua:<br> <strong>Hotline:</strong>
+								<span style="color: #FF0000;">0982565569</span><br> 
+								<a href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
+								https://www.facebook.com/dang0599/</a>
+									<br>
+									<strong>Hệ thống Showroom:</strong>
+								<a
+								href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
+							</span>
+						</p>
+					<div class="clear"></div>
+					<div id="tintuc_lienquan" style="margin-bottom: 2%;">
+						<span style="font-size: 15px;"><b>Tin tức liên quan :</b></span>
+					</div>					
+					<div class="row">
+						<th:block th:each="lienQuan : ${lienQuans}">
+							<div class="col-md-4">
+								<a class="img_tag"
+									th:href="@{/tin_tuc(code=${lienQuan.code})}">
+									<img
+									alt="Ảnh"
+									style="display: inline-block; width: 100%; height: 240px;"
+									class="lazy" th:src="@{'/uploads/tintuc/'+${lienQuan.image}}">
+								</a>
+								<div class="title_tintuc">
+									<a th:href="@{/tin_tuc(code=${lienQuan.code})}" >
+										<b th:utext="${lienQuan.title}"></b>
+									</a>
+								</div>
+							</div>
+						</th:block>
+
+					</div>
+
+				</div>
+				<div class="col-md-3">
+					<div class="doc_nhieu">
+						<div class="title-news-right">
+							<span>Tin xem nhiều</span>
+						</div>
+						<th:block th:each="docNhieu : ${docNhieus}">
+							<div class="news_hot">
+								<div class="row">
+									<div class="col-md-5">
+										<a th:href="@{/tin_tuc(code=${docNhieu.code})}"> <img
+											alt="Ảnh" th:src="@{'/uploads/tintuc/'+${docNhieu.image}}"
+											style="width: 100%; height: auto;">
+										</a>
+									</div>
+									<div class="col-md-7">
+										<a th:href="@{/tin_tuc(code=${docNhieu.code})}"
+											th:utext="${docNhieu.title}" class="title_hot"> </a>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</th:block>
+
+					</div>
+					<div class="doc_nhieu">
+						<div class="title-news-right">
+							<span>Tin mới nhất</span>
+						</div>
+						<th:block th:each="moiNhat : ${moiNhats}">
+							<div class="news_hot">
+								<div class="row">
+									<div class="col-md-5">
+										<a th:href="@{/tin_tuc(code=${moiNhat.code})}"> <img
+											alt="Ảnh" th:src="@{'/uploads/tintuc/'+${moiNhat.image}}"
+											style="width: 100%; height: auto;">
+										</a>
+									</div>
+									<div class="col-md-7">
+										<a th:href="@{/tin_tuc(code=${moiNhat.code})}"
+											th:utext="${moiNhat.title}" class="title_hot"> </a>
+									</div>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</th:block>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

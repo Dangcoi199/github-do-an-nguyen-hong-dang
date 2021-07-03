@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Khoảng giá</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Khoảng giá
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Cập nhật khoảng giá</h2>
+						</div>
+					</div>
+					<form class="form" id="formUpdateKhGia">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="form-label">Khoảng giá</label> <input
+									id="name" name="name" type="text" placeholder="Nhập khoảng giá"
+									class="form-control" th:value="${khoangGia.name}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="mocDau" class="form-label">Mốc đầu</label> <input
+									id="mocDau" name="mocDau" type="text"
+									placeholder="Nhập mốc đầu" class="form-control"
+									th:value="${khoangGia.mocDau}">
+								<span class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="mocCuoi" class="form-label">Mốc cuối</label> <input
+									id="mocCuoi" name="mocCuoi" type="text"
+									placeholder="Nhập mốc cuối" class="form-control"
+									th:value="${khoangGia.mocCuoi}">
+								<span class="form-message"></span>
+							</div>
+						</div>
+						<input type="hidden" th:value="${khoangGia.id}" id="idCate"
+							name="id">
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Lưu thay đổi</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			// Mong muốn của chúng ta
+			Validator({
+				form : '#formUpdateKhGia',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#name',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#mocDau',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#mocCuoi',
+								'Vui lòng không để trống !'),
+						 ],
+				onSubmit : function(data) {
+					console.log(data);
+					$.ajax({
+						url : '/khoangGias',
+						type : 'PUT',
+						contentType : 'application/json',
+						data : JSON.stringify(data),
+						dataType : 'json',
+						success : function(response) {
+							window.location.href = "/listKhoangGia";
+							alert("Cập nhật danh mục thành công !");
+						},
+						error : function(response) {
+							window.location.href = "/listKhoangGia";
+							alert("Lỗi hệ thống !");
+						}
+					});
+				}
+			});
+		</script>
+</body>
+</html>
+

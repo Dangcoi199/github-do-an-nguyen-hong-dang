@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Chất liệu vỏ</title>
+<link th:href="@{admin/css/modal.css}" rel="stylesheet">
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}" rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+
+			<!-- DataTables Example -->
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Data Table Example
+						</div>
+						<div class="col-md-6">
+						<button type="button" onclick="warningBeforeDelete()" data-toggle="tooltip" class="btn btn-danger" style="float: right; margin-left: 20px;">Xóa chất liệu</button>
+							<a type="button" class="btn btn-success" style="float: right;" th:href="@{/admin_addChatLieuVo}">Thêm mới</a>
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%"
+							cellspacing="0">
+							<thead>
+								<tr>
+									<th>Chọn<input type="checkbox" id="checkAll" style=" margin-left: 5px;"></th>
+									<th>Tên chất liệu</th>
+									<th>Thao tác</th>
+
+								</tr>
+							</thead>
+							<tfoot>
+								<tr>
+									<th><input type="checkbox" id="checkAll1"></th>
+									<th>Tên chất liệu</th>
+									<th>Thao tác</th>
+								</tr>
+							</tfoot>
+							<tbody>
+								<tr th:each="chatLieu : ${chatLieuVos}">
+									<td><input type="checkbox" th:id="'checkbox'+${chatLieu.id}" th:value="${chatLieu.id}" style="margin-left: -5px;"></td>
+									<td><a data-toggle="modal"
+										th:data-target="'#myModal'+${chatLieu.id}"
+										th:utext="${chatLieu.material}"> </a></td>
+									<td>
+
+										<a class="btn btn-xs btn-info" th:href="@{/admin_updateChatLieuVo(id=${chatLieu.id})}">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</a>
+
+										<button class="btn btn-xs btn-danger" th:value="${chatLieu.id}" onclick="warningBeforeDeleteOne(this)">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</button>
+
+									</td>
+									<div class="modal" th:id="'myModal'+${chatLieu.id}">
+											<div class="modal-dialog">
+												<div class="modal-content">
+
+													<!-- Modal Header -->
+													<div class="modal-header">
+														<h4 class="modal-title">Mô tả ngắn</h4>
+														<button type="button" class="close" data-dismiss="modal">&times;</button>
+													</div>
+
+													<!-- Modal body -->
+													<div class="modal-body">
+														<p th:utext="${chatLieu.shortDescription}" style="text-align: left; font-size: 18px;"></p>
+													</div>
+
+													<!-- Modal footer -->
+													<div class="modal-footer">
+														<button type="button" class="btn btn-danger"
+															data-dismiss="modal">Close</button>
+													</div>
+
+												</div>
+											</div>
+										</div>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer small text-muted">Updated yesterday at
+					11:59 PM</div>
+			</div>
+
+			<p class="small text-center text-muted my-5">
+				<em>More table examples coming soon...</em>
+			</p>
+
+		</div>
+		<!-- /.container-fluid -->
+		<script type="text/javascript">
+			$("#checkAll").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			$("#checkAll1").click(function() {
+				$('input:checkbox').not(this).prop('checked', this.checked);
+			});
+			function warningBeforeDelete() {
+				swal({
+					title: "Bạn có muốn xóa?",
+					text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(
+						function(isConfirm) {
+							if (isConfirm) {
+								var ids = $('tbody input[type=checkbox]:checked')
+										.map(function() {
+											return $(this).val();
+										}).get();
+								deleteChatLieuVo(ids);
+							}
+						})
+			};
+			 function warningBeforeDeleteOne(item) {
+				swal({
+					title: "Bạn có muốn xóa ?",
+					  text: "Bạn có chắc chắn muốn xóa ?",
+					  icon: "warning",
+					  buttons: true,
+					  dangerMode: true,
+				}).then(function(isConfirm){
+					if(isConfirm){
+						var ids = $(item)
+								.map(function() {
+									return $(this).val();
+								}).get();					
+						deleteChatLieuVo(ids);
+					}
+				})
+			}; 
+			function deleteChatLieuVo(data) {
+				$.ajax({
+					url : '/chatLieuVos',
+					type : 'DELETE',
+	 				contentType : 'application/json',
+				    data : JSON.stringify(data), 
+					success : function(result) {
+						window.location.href = "/admin_listChatLieuVo";
+						swal({
+				              title: "Deleted!",
+				              text: "Your row has been deleted.",
+				              type: "success",
+				              timer: 100000
+				           });
+					},
+					error : function(error) {
+						window.location.href = "/admin_listChatLieuVo";
+						alert("Lỗi hệ thống");
+					}
+				})	
+			};
+		</script>
+	</div>
+</body>
+</html>
+

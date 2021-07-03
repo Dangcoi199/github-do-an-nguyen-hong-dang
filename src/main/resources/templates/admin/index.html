@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Quản trị</title>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Overview</li>
+			</ol>
+
+			<!-- Icon Cards-->
+			<div class="row">
+				<div class="col-xl-3 col-sm-6 mb-3"
+					th:unless="${orderInfoSize} == 0">
+					<div class="card text-white bg-primary o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa-fw fa-shopping-cart"></i>
+							</div>
+							<div class="mr-5">
+								<span th:utext="${orderInfoSize}+ ' NEW ORDERS'"></span>
+							</div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1"
+							th:href="@{/admin_listOrderInfo}"> <span class="float-left">Xem
+								chi tiết</span> <span class="float-right"> <i
+								class="fas fa-angle-right"></i>
+						</span>
+						</a>
+					</div>
+				</div>
+				<div class="col-xl-3 col-sm-6 mb-3" th:unless="${sizeLienHes} == 0">
+					<div class="card text-white bg-danger o-hidden h-100">
+						<div class="card-body">
+							<div class="card-body-icon">
+								<i class="fas fa-fw fa-life-ring"></i>
+							</div>
+							<div class="mr-5">
+								<span th:utext="${sizeLienHes}+ ' MESSAGES'"></span>
+							</div>
+						</div>
+						<a class="card-footer text-white clearfix small z-1"
+							th:href="@{/admin_listLienHeStatus}"> <span
+							class="float-left">Xem chi tiết</span> <span class="float-right">
+								<i class="fas fa-angle-right"></i>
+						</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			
+
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Thành công</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!--start-breadcrumbs-->
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main" style="font-size: 13px;">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/}">Trang chủ</a></li>
+						<li class="active">Thành công</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12" style="text-align: center; margin-bottom: 5%; margin-top: 5%;">					
+					<h3 style="color: #12d144; padding: 20px;"> <img alt="" th:src="@{web/images/check.png}" style="width: 4%; height: auto; margin-right: 1%;">Đơn hàng đã được gửi thành công !</h3>
+					<h4 style="padding: 20px;">Cảm ơn khách hàng đã tin tưởng và đặt hàng <a th:href="@{/}" style="color: red;text-decoration: none;">LuxuryWatches </a> cung cấp !</h4>
+					<h4>Kính chúc quý khách hàng sức khỏe, thành công và chúng tôi hi vọng quý khách hàng tiếp tục ủng hộ <a th:href="@{/}" style="color: red;text-decoration: none;">LuxuryWatches</a> !</h4>
+					<img alt="" th:src="@{web/images/thank_you_2.jpg}" style="width: 30%;height: auto;">
+				</div>
+			</div>
+			<hr>
+		</div>
+
+
+	</div>
+
+</body>
+</html>

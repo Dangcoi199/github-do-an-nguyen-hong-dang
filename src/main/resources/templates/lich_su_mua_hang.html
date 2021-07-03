@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Lịch sử mua hàng</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/trang-chu}">Trang chủ</a></li>
+						<li class="active">Thanh toán</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--start-ckeckout-->
+		<div class="ckeckout">
+			<div class="container">
+				<div class="ckeck-top heading">
+					<h2 style="color: #662d91;">LỊCH SỬ MUA HÀNG</h2>
+				</div>
+				<div class="ckeckout-top">
+					<div class="cart-items">
+						<h3 th:utext="'Mua hàng ('+${sizeItem}+')'"></h3>
+						<div class="in-check">
+							<ul class="unit">
+								<li><span>Mã hóa đơn</span></li>
+								<li><span>Ngày tạo</span></li>
+								<li><span>Người tạo</span></li>
+								<li><span>Tổng tiền</span></li>
+								<div class="clearfix"></div>
+							</ul>
+							<th:block th:each="item : ${hoaDonBans}">
+								<ul class="cart-header">
+									<li><a th:href="@{/order_detail_email(id=${item.id})}"> <span class="name" th:utext="'HĐ'+${item.id}"></span>
+									</a></li>
+									<li><span class="name"
+										th:utext="${#dates.format(item.createdDate, 'dd-MM-yyyy HH:mm')}"></span></li>
+									<li><span class="name" th:utext="${item.createdBy}"></span></li>
+									<li><span class="cost"
+										th:utext="${#numbers.formatDecimal(item.orderInfo.tongTien, 0, 'COMMA', 0, 'POINT')}+' đ'"></span>
+										<p></p></li>
+									<div class="clearfix"></div>
+								</ul>
+								<!-- Begin Modal Detail Images -->
+								<div class="modal fade bd-example-modal-lg"
+									th:id="'detailHoaDon'+${item.id}">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+
+											<!-- Modal Header -->
+											<div class="modal-header">
+												<h4 class="modal-title">Chi tiết hóa đơn</h4>
+												<button type="button" class="close" data-dismiss="modal">&times;</button>
+											</div>
+
+											<!-- Modal body -->
+											<div class="modal-body">Nguyễn Hồng Đăng</div>
+
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger"
+													data-dismiss="modal">Close</button>
+											</div>
+
+										</div>
+									</div>
+								</div>
+								<!-- End modal Detail Images -->
+							</th:block>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end-ckeckout-->
+		<hr>
+	</div>
+
+</body>
+</html>

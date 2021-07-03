@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{fragments/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Chi tiết đơn hàng</title>
+<style>
+.banner {
+	height: 300px;
+}
+
+.price {
+	color: #c4161c !important;
+	font-size: 18px !important;
+}
+
+.old_price {
+	color: #808080 !important;
+	font-size: 12px !important;
+	margin-right: 10px !important;
+	text-decoration: line-through !important;
+}
+
+.tiet_kiem {
+	color: #b80405 !important;
+	font-size: 12px !important;
+	font-weight: bold !important;
+}
+
+.form-message {
+	color: red;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="breadcrumbs-main">
+					<ol class="breadcrumb">
+						<li><a th:href="@{/trang-chu}">Trang chủ</a></li>
+						<li class="active">Chi tiết đơn hàng</li>
+					</ol>
+				</div>
+			</div>
+		</div>
+		<!--end-breadcrumbs-->
+		<!--start-ckeckout-->
+		<div class="ckeckout">
+			<div class="container">
+				<div class="ckeck-top heading">
+					<h2 style="color: #662d91;">CHI TIẾT ĐƠN HÀNG</h2>
+				</div>
+				<div class="ckeckout-top">
+					<div class="cart-items">
+						<div class="in-check">
+							<ul class="unit">
+								<li><span>Sản phẩm</span></li>
+								<li><span>Giá</span></li>
+								<li><span>Số lượng</span></li>
+								<li><span>Thành tiền</span></li>
+								<div class="clearfix"></div>
+							</ul>
+							<th:block th:each="item : ${hoaDonBan.orderInfo.orderDetails}">
+								<ul class="cart-header">
+									<li><a th:href="@{/product_detailById(id=${item.productId})}"> <span th:utext="${item.name}" ></span>
+									</a></li>
+									<li><span class="cost"
+										th:utext="(${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+										style="color: #c4161c;"></span></li>
+									<li><span class="cost" th:utext="${item.soLuong}"></span></li>
+									<li><span
+										th:utext="(${#numbers.formatDecimal(item.thanhTien, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+										class="cost"></span>
+										<p>Delivered in 2-3 business days</p></li>
+									<div class="clearfix"></div>
+								</ul>
+							</th:block>
+						</div>
+						<div class="row">
+
+							<div class="col-md-12">
+								<div style="float: right;">
+									<label style="font-size: 18px; margin-right: 10px;">Tổng
+										tiền :</label> <span
+										th:utext="(${#numbers.formatDecimal(hoaDonBan.orderInfo.tongTien, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"
+										style="font-size: 18px;"></span>
+								</div>
+
+
+							</div>
+						</div>
+						<hr>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Thương hiệu</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+<script th:src="@{ckeditor/ckeditor.js}"></script>
+<script th:src="@{ckfinder/ckfinder.js}"></script>
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý thương hiệu
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Thêm mới thương hiệu</h2>
+						</div>
+					</div>
+					<form class="form" id="formAddThuongHieu">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="brandName" class="form-label">Tên thương hiệu</label> <input id="brandName" name="brandName" type="text"
+									placeholder="Tên thương hiệu" class="form-control"> <span
+									class="form-message" id="messageName"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="logo" class="form-label">Logo :</label> <input id="logo" name="logo" type="file"
+									 class="form-control"> <span
+									class="form-message" ></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-12">
+								<label for="shortDescription" class="form-label">Mô tả
+									ngắn</label> 
+									<textarea name="shortDescription" id="shortDescription"></textarea> 
+									<span class="form-message"></span>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="form-group col-md-12">
+								<label for="content" class="form-label">Nội dung</label> 
+									<textarea name="content" id="content"></textarea> 
+									<span class="form-message"></span>
+							</div>
+						</div>
+
+
+
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Thêm danh mục</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+		var data={};
+		var content='';
+		var shortDescription='';
+		
+		$(document).ready(function(){
+			content = CKEDITOR.replace(
+					'content',
+					{
+						filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+						filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+						filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+						filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+						filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+						filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+					});
+		});
+		$(document).ready(function(){
+			shortDescription = CKEDITOR.replace(
+					'shortDescription',
+					{
+						filebrowserBrowseUrl : 'ckfinder/ckfinder.html',
+						filebrowserImageBrowseUrl : 'ckfinder/ckfinder.html?type=Images',
+						filebrowserFlashBrowseUrl : 'ckfinder/ckfinder.html?type=Flash',
+						filebrowserUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files',
+						filebrowserImageUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images',
+						filebrowserFlashUploadUrl : 'ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Flash'
+					});
+		});
+		document.getElementById('logo').addEventListener('change', openFiles, false);
+		function openFiles(evt) {
+		    var files = evt.target.files;
+			var file = files[0],
+		    reader = new FileReader();
+		    reader.onload = (function (file) {
+		            return function (e) { 
+		            	var binaryData = this.result;
+		            	 data["bytes"] = window.btoa(binaryData);
+		            	 data["image"] = file.name;
+		            }
+		        })(file);
+
+		        reader.readAsBinaryString(file);
+		}
+			// Validate form 
+			Validator({
+				form : '#formAddThuongHieu',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#brandName',
+								'Vui lòng không để trống !'),
+								Validator.isRequired('#logo',
+								'Vui lòng chọn ảnh !'),
+								Validator.isFileImage('#logo',
+								'Chọn đúng định dạng file ảnh !'),
+								
+						 ],
+				onSubmit : function(formdata) {
+			          formdata["bytes"] = data["bytes"];
+			          formdata["image"] = data["image"];
+			          formdata["content"] = content.getData();
+			          formdata["shortDescription"] = shortDescription.getData();
+			          console.log(formdata);
+					   $
+							.ajax({
+								url : '/brands',
+								type : 'POST',
+								contentType : 'application/json',
+								data : JSON.stringify(formdata),
+								dataType : 'json',
+								success : function(response) {
+									alert("Thêm danh mục thành công");
+									window.location.href = "/admin_listBrand";
+								},
+								error : function(response) {
+									var data = JSON
+											.parse(response.responseText);
+									if (data.status == 400) {
+										document
+												.getElementById("messageName").innerHTML = data.validationErrors.brandName;
+									} else {
+										window.location.href = "/admin_listBrand";
+										alert("Lỗi hệ thống");
+									}
+								}
+							});
+				}
+			});
+		</script>
+</body>
+</html>
+

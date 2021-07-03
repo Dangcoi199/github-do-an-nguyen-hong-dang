@@ -1,0 +1,19 @@
+h4.modal-title {
+    color: #ee3535;
+}
+.modal-body label {
+    font-size: 18px;
+    color: #2006f2;
+}
+.modal-body span{
+ font-size: 18px;
+    margin-left: 8px;
+}
+td a:hover {
+  background-color: #ffff80;
+}
+.form-control:disabled, .form-control[readonly] {
+    opacity: 1;
+    background-color: #28a745;
+    color: #fff;
+}

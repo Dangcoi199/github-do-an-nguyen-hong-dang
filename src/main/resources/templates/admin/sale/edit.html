@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Khuyến mại</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a th:href="@{/admin_index}">Dashboard</a></li>
+				<li class="breadcrumb-item"><a th:href="@{/admin_listSale}">Danh sách chương trình</a></li>
+				<li class="breadcrumb-item active">Cập nhật chương trình</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Chương trình khuyến mại
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Cập nhật loại dây</h2>
+						</div>
+					</div>
+					<form class="form" id="formUpdateSale">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="form-label">Tên chương trình </label> <input
+									id="name" name="name" type="text"
+									placeholder="Nhập tên chương trình" class="form-control"
+									th:value="${sale.name}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="percent" class="form-label">Phần trăm </label> <input
+									id="percent" name="percent" type="text"
+									placeholder="Nhập số phần trăm" class="form-control"
+									th:value="${sale.percent}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<input type="hidden" th:value="${sale.id}" id="idCate"
+							name="id">
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Lưu thay đổi</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			// Mong muốn của chúng ta
+			Validator({
+				form : '#formUpdateSale',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+					Validator.isRequired('#name',
+					'Vui lòng không để trống !'),
+					Validator.isRequired('#percent',
+					'Vui lòng không để trống !'),
+					Validator.isMumber('#percent',
+					'Vui lòng nhập từ 0-99 !'), ],
+				onSubmit : function(data) {
+					console.log(data);
+					$.ajax({
+						url : '/sales',
+						type : 'PUT',
+						contentType : 'application/json',
+						data : JSON.stringify(data),
+						dataType : 'json',
+						success : function(response) {
+							window.location.href = "/listSale";
+							alert("Cập nhật chương trình thành công !");
+						},
+						error : function(response) {
+							window.location.href = "/listSale";
+							alert("Lỗi hệ thống !");
+						}
+					});
+				}
+			});
+		</script>
+</body>
+</html>
+

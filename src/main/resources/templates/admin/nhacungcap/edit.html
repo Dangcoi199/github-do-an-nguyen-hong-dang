@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/fragments/layout}">
+<head>
+<title>Nhà cung cấp</title>
+<link th:href="@{admin/css/user/update.css}" rel="stylesheet">
+</head>
+<body id="page-top">
+	<div layout:fragment="content" id="content-wrapper">
+		<div class="container-fluid">
+			<!-- Breadcrumbs-->
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item active">Tables</li>
+			</ol>
+			<div class="card mb-3">
+				<div class="card-header">
+					<div class="row">
+						<div class="col-md-6">
+							<i class="fas fa-table"></i> Quản lý nhà cung cấp
+						</div>
+					</div>
+				</div>
+				<div class="formUpdate">
+					<div class="row">
+						<div class="col-md-12">
+							<h2 class="headerUpdate">Cập nhật nhà cung cấp</h2>
+						</div>
+					</div>
+					<form class="form" id="formUpdateSupplier">
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="name" class="form-label">Tên nhà cung cấp</label> <input
+									id="name" name="name" type="text"
+									placeholder="Nhập tên nhà cung cấp" class="form-control"
+									th:value="${supplier.name}"> <span class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="address" class="form-label">Địa chỉ</label> <input
+									id="address" name="address" type="text"
+									placeholder="Nhập địa chỉ" class="form-control"
+									th:value="${supplier.address}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-6">
+								<label for="email" class="form-label">Email:</label> <input
+									id="email" name="email" type="text" placeholder="Nhập email"
+									class="form-control" th:value="${supplier.email}"> <span
+									class="form-message"></span>
+							</div>
+							<div class="form-group col-md-6">
+								<label for="phone" class="form-label">Số điện thoại</label> <input
+									id="phone" name="phone" type="text"
+									placeholder="Nhập số điện thoại" class="form-control"
+									th:value="${supplier.phone}"> <span
+									class="form-message"></span>
+							</div>
+						</div>
+						<input type="hidden" th:value="${supplier.id}" id="idCate"
+							name="id">
+						<div class="row">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary"
+									style="margin: 30px;" id="btnAddUser">Lưu thay đổi</button>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			// Mong muốn của chúng ta
+			Validator({
+				form : '#formUpdateSupplier',
+				formGroupSelect : '.form-group',
+				errorSelector : '.form-message',
+				rules : [
+						Validator.isRequired('#name',
+								'Vui lòng không để trống !'),
+						Validator.isRequired('#address',
+								'Vui lòng không để trống !'),
+						Validator.isEmail('#email', "Nhập chưa đúng email !"),
+						Validator.isMumber('#phone',
+								"Vui lòng nhập các số từ 0 - 9 !"),
+						Validator.isPhone('#phone', 10 , "Vui lòng đúng 10 số!"),
+				],
+				onSubmit : function(formdata) {
+					$.ajax({
+						url : '/suppliers',
+						type : 'PUT',
+						contentType : 'application/json',
+						data : JSON.stringify(formdata),
+						dataType : 'json',
+						success : function(response) {
+							window.location.href = "/admin_listSupplier";
+							alert("Cập nhật nhà cung cấp thành công !");
+						},
+						error : function(response) {
+							window.location.href = "/admin_listSupplier";
+							alert("Lỗi hệ thống !");
+						}
+					});
+				}
+			});
+		</script>
+</body>
+</html>
+
