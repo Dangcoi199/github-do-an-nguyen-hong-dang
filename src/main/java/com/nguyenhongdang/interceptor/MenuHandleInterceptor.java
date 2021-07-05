@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.nguyenhongdang.dto.MenuDTO;
+import com.nguyenhongdang.entity.UserEntity;
 import com.nguyenhongdang.service.web.IMenuService;
 import com.nguyenhongdang.service.web.IShoppingCartService;
 import com.nguyenhongdang.service.web.IUserService;
@@ -35,7 +36,13 @@ public class MenuHandleInterceptor implements HandlerInterceptor {
 		Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
 		if (authentication.getPrincipal() != "anonymousUser") {
 			String userName = authentication.getName();
-			request.setAttribute("fullNameAccount", userService.getByUserName(userName).getFullname());
+			UserEntity entity = userService.getByUserName(userName);
+			if(entity != null) {
+				request.setAttribute("fullNameAccount", entity.getFullname());
+			}else {
+				request.setAttribute("fullNameAccount", authentication.getName());
+			}
+			
 		}
 
 		return true;

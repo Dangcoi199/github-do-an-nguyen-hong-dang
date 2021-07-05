@@ -10,10 +10,10 @@ importScripts(
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
 firebase.initializeApp({
-    messagingSenderId: "911209797607",
-    apiKey: "AIzaSyCFFA4_iFJuCx2SzTHk8sU8I8VJ5Rg_6XY",
-    projectId: "luxurywatch-315607",
-    appId:  "1:911209797607:web:0c69280ea815641f538f42",
+    messagingSenderId: "856140000238",
+    apiKey: "AIzaSyAQ2PMk54tvLDjydmdalHZVqpYh88T7aek",
+    projectId: "thuctapdevmaster01",
+    appId: "1:856140000238:web:8e7fa3c8f4ac9b30aebcff",
 });
 var linkEven = ""
 // Retrieve an instance of Firebase Messaging so that it can handle background

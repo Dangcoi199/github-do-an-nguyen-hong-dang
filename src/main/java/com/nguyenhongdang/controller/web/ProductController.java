@@ -16,11 +16,13 @@ import com.nguyenhongdang.dto.OutPutPaginationProduct;
 import com.nguyenhongdang.dto.ProductTransferDTO;
 import com.nguyenhongdang.entity.SanPhamEntity;
 import com.nguyenhongdang.entity.SliderEntity;
+import com.nguyenhongdang.entity.UserEntity;
 import com.nguyenhongdang.service.admin.IBrandService;
 import com.nguyenhongdang.service.admin.IKhoangGiaService;
 import com.nguyenhongdang.service.admin.ILoaiDayService;
 import com.nguyenhongdang.service.admin.IProductTypeService;
 import com.nguyenhongdang.service.admin.ISliderService;
+import com.nguyenhongdang.service.admin.IUserService;
 import com.nguyenhongdang.service.web.ISanPhamService;
 import com.nguyenhongdang.service.web.ITinTucService;
 
@@ -40,7 +42,6 @@ public class ProductController {
 	private IKhoangGiaService khoangGiaService;
 	@Autowired
 	private ITinTucService tinTucService;
-
 	@GetMapping(value = { "/","/trang-chu" })
 	public String index(Model model, @RequestParam(name = "page", defaultValue = "1") int page,
 			@RequestParam(name = "limit", defaultValue = "8") int limit) {

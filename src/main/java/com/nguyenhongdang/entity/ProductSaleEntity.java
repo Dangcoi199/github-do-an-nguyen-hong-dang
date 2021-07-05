@@ -25,11 +25,11 @@ public class ProductSaleEntity extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name = "begin", nullable = false)
+	@Column(name = "batdau", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date begin;
 	
-	@Column(name = "end", nullable = false)
+	@Column(name = "ketthuc", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date end;
 	

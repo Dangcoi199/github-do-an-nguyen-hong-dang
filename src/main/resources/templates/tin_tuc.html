@@ -8,17 +8,17 @@
 <link th:href="@{web/css/tintuc.css}" rel="stylesheet" type="text/css" />
 <style type="text/css">
 .title_tintuc a {
-    font-size: 16px;
-    font-family: UTMAvoBold;
-    text-align: center;
-    display: inline-block;
-    line-height: 24px;
-    margin: 10px 0;
-    padding: 0 20px;
-    height: 75px;
-    overflow: hidden;
-    color: #000;
-    text-decoration: none;
+	font-size: 16px;
+	font-family: UTMAvoBold;
+	text-align: center;
+	display: inline-block;
+	line-height: 24px;
+	margin: 10px 0;
+	padding: 0 20px;
+	height: 75px;
+	overflow: hidden;
+	color: #000;
+	text-decoration: none;
 }
 </style>
 </head>
@@ -61,37 +61,35 @@
 					<div style="margin-left: 10px;">
 						<section th:utext="${tinTuc.content}" id="content"></section>
 					</div>
-					<p><span style="font-size:16px;">-----------------------------------------------------------</span></p>
-						<p>
-							<span style="font-size: 16px;">Để được tư vấn cụ
-								thể,&nbsp;Quý khách hàng liên hệ tới <a href="https://galle.vn/"
-								target="_blank">Luxury Watches</a> qua:<br> <strong>Hotline:</strong>
-								<span style="color: #FF0000;">0982565569</span><br> 
-								<a href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
-								https://www.facebook.com/dang0599/</a>
-									<br>
-									<strong>Hệ thống Showroom:</strong>
-								<a
-								href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
-							</span>
-						</p>
+					<p>
+						<span style="font-size: 16px;">-----------------------------------------------------------</span>
+					</p>
+					<p>
+						<span style="font-size: 16px;">Để được tư vấn cụ
+							thể,&nbsp;Quý khách hàng liên hệ tới <a href="https://galle.vn/"
+							target="_blank">Luxury Watches</a> qua:<br> <strong>Hotline:</strong>
+							<span style="color: #FF0000;">0982565569</span><br> <a
+							href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
+								https://www.facebook.com/dang0599/</a> <br> <strong>Hệ
+								thống Showroom:</strong> <a
+							href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
+						</span>
+					</p>
 					<div class="clear"></div>
 					<div id="tintuc_lienquan" style="margin-bottom: 2%;">
 						<span style="font-size: 15px;"><b>Tin tức liên quan :</b></span>
-					</div>					
+					</div>
 					<div class="row">
 						<th:block th:each="lienQuan : ${lienQuans}">
 							<div class="col-md-4">
-								<a class="img_tag"
-									th:href="@{/tin_tuc(code=${lienQuan.code})}">
-									<img
-									alt="Ảnh"
+								<a class="img_tag" th:href="@{/tin_tuc(code=${lienQuan.code})}">
+									<img alt="Ảnh"
 									style="display: inline-block; width: 100%; height: 240px;"
 									class="lazy" th:src="@{'/uploads/tintuc/'+${lienQuan.image}}">
 								</a>
 								<div class="title_tintuc">
-									<a th:href="@{/tin_tuc(code=${lienQuan.code})}" >
-										<b th:utext="${lienQuan.title}"></b>
+									<a th:href="@{/tin_tuc(code=${lienQuan.code})}"> <b
+										th:utext="${lienQuan.title}"></b>
 									</a>
 								</div>
 							</div>

@@ -17,6 +17,91 @@
 	type="text/css" />
 <script th:src="@{web/js/jquery.easydropdown.js}"></script>
 <script th:src="@{web/bootstrap/js/bootstrap.min.js}"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script
+	src="https://www.gstatic.com/firebasejs/7.19.1/firebase-analytics.js"></script>
+<script
+	src="https://www.gstatic.com/firebasejs/7.15.0/firebase-messaging.js"></script>
+<script>
+	function addToken(item){
+		var productId = $('#product_id').val();
+		saveToken(productId);
+	};
+       function saveToken(productId){
+    	   // Your web app's Firebase configuration
+           var firebaseConfig = {
+               apiKey: "AIzaSyAQ2PMk54tvLDjydmdalHZVqpYh88T7aek",
+               authDomain: "thuctapdevmaster01.firebaseapp.com",
+               databaseURL: "https://thuctapdevmaster01.firebaseio.com",
+               projectId: "thuctapdevmaster01",
+               storageBucket: "thuctapdevmaster01.appspot.com",
+               messagingSenderId: "856140000238",
+               appId: "1:856140000238:web:8e7fa3c8f4ac9b30aebcff",
+               measurementId: "G-TYG6VHWHXM"
+           };
+           // Initialize Firebase
+           firebase.initializeApp(firebaseConfig);
+           firebase.analytics();
+           const messaging = firebase.messaging();
+           messaging.usePublicVapidKey('BCK4i6fsd5ZCGBiQ5gVSwdySbsjRLRbqbqaa-3fPM8rxbapEU7II2BLTs1IRdfmYYrHMP6JM9mA5dnM3cTOgxa4');
+           messaging
+               .requestPermission()
+               .then(function () {
+                   console.log("Notification permission granted.");
+
+                   // get the token in the form of promise
+                   return messaging.getToken()
+               })
+               .then(function (token) {
+                   console.log(token);
+                   var data = {};
+                   data["token"] = token;
+                   data["product_id"] = productId;
+                   $
+					.ajax({
+						url : '/save-token',
+						type : 'POST',
+						contentType : 'application/json',
+						data : JSON.stringify(formdata),
+						dataType : 'json',
+						success : function(response) {
+							alert("Bạn sẽ nhận được thông báo khi có sản phẩm !");
+						},
+						error : function(response) {
+							
+						}
+					});
+               })
+               .catch(function (err) {
+                   console.log("Unable to get permission to notify.", err);
+               });
+               messaging.onTokenRefresh(() => {
+               messaging.getToken().then((refreshedToken) => {
+                       $.post('/save-token?token='+refreshedToken);
+                   }).catch((err) => {
+                       console.log('Unable to retrieve refreshed token ', err);
+                   });
+               });
+           messaging.onMessage((payload) => {
+               console.log('Message received. ', payload);
+               // Customize notification here
+               const notificationTitle = payload.data.title;
+               const notificationOptions = {
+                   body: payload.data.content,
+                   icon: "/itwonders-web-logo.png",
+               };
+               let thongBao = new Notification(notificationTitle, notificationOptions);
+               thongBao.onclick = function (event) {
+                   thongBao.close();
+                   window.open(payload.data.link);
+               }
+           });
+       }
+</script>
 <script type="text/javascript">
 	function addItem(item) {
 		var data = $(item).val();
@@ -136,11 +221,11 @@
 									<input type="hidden" th:value="${product.id}" id="product_id">
 									<div class="star-on">
 										<ul class="star-footer" th:if="${product.soSao} == 1">
-											<li><a><i> </i></a></li>										
+											<li><a><i> </i></a></li>
 										</ul>
 										<ul class="star-footer" th:if="${product.soSao} == 2">
 											<li><a><i> </i></a></li>
-											<li><a><i> </i></a></li>										
+											<li><a><i> </i></a></li>
 										</ul>
 										<ul class="star-footer" th:if="${product.soSao} == 3">
 											<li><a><i> </i></a></li>

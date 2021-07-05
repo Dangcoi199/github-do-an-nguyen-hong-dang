@@ -1,19 +1,30 @@
 package com.nguyenhongdang.controller.admin;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.nguyenhongdang.dto.GooglePojo;
 import com.nguyenhongdang.entity.RoleEntity;
 import com.nguyenhongdang.entity.UserEntity;
 import com.nguyenhongdang.service.admin.ILienHeService;
 import com.nguyenhongdang.service.admin.IOrderInfoService;
 import com.nguyenhongdang.service.admin.IRoleService;
 import com.nguyenhongdang.service.admin.IUserService;
+import com.nguyenhongdang.utils.GoogleUtils;
 
 @Controller
 public class AdminController {
@@ -25,6 +36,27 @@ public class AdminController {
 	private IOrderInfoService orderService;
 	@Autowired
 	private ILienHeService lienHeService;
+	
+	@Autowired
+	private GoogleUtils googleUtil;
+	
+	@RequestMapping("/login-google")
+	  public String loginGoogle(HttpServletRequest request) throws ClientProtocolException, IOException {
+	    String code = request.getParameter("code");
+	    
+	    if (code == null || code.isEmpty()) {
+	      return "redirect:/login?google=error";
+	    }
+	    String accessToken = googleUtil.getToken(code);
+	    
+	    GooglePojo googlePojo = googleUtil.getUserInfo(accessToken);
+	    UserDetails userDetail = googleUtil.buildUser(googlePojo);
+	    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
+	        userDetail.getAuthorities());
+	    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+	    SecurityContextHolder.getContext().setAuthentication(authentication);
+	    return "redirect:/lien-he";
+	  }
 	
 	@GetMapping(value = "/admin_index")
 	public String index(Model model) {

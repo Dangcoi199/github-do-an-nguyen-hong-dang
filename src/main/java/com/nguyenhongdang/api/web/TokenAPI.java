@@ -17,24 +17,12 @@ public class TokenAPI {
 	private ITokenService service;
 	@Autowired
 	EntityManager entityManager;
-	
+
 	@PostMapping("/save-token")
+
 	@Transactional
 	public TokenEntity insertToken(@RequestBody TokenEntity entity) {
 		return service.save(entity);
 	}
-	
-	/*
-	 * @PostMapping("/save-token")
-	 * 
-	 * @Transactional public void insertToken(@RequestParam(name = "token") String
-	 * token , @RequestParam(name = "product_id") long product_id) { String hql=
-	 * "from TokenEntity E where E.token = :token and E.productId =:product_id";
-	 * Session session = entityManager.unwrap(Session.class);
-	 * TypedQuery<TokenEntity> query = session.createQuery(hql, TokenEntity.class);
-	 * query.setParameter("token", token);
-	 * query.setParameter("product_id",product_id); if(query.getResultList().size()
-	 * == 0) { TokenEntity newToken = new TokenEntity(); newToken.setToken(token);
-	 * newToken.setProductId(product_id); entityManager.persist(newToken); } }
-	 */
+
 }

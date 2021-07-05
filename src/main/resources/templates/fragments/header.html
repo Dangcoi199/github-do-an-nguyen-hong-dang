@@ -26,8 +26,9 @@
 					</div>
 					<div id="author_app"
 						sec:authorize="isAuthenticated()">
-						<a style="margin-right: 15px; color: #fff;">Xin chào :  <span
-							th:utext="${fullNameAccount}" id="username"></span></a> <a style="color: #fff;"
+						<a style="margin-right: 15px; color: #fff;">Xin chào :
+						<span th:utext="${fullNameAccount}" id="username"></span>
+						</a> <a style="color: #fff;"
 							th:href="@{/logout}">Logout</a>
 					</div>
 					
