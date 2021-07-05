@@ -189,6 +189,13 @@
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>fluent-hc</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.cksource</groupId>
+			<artifactId>ckfinder3</artifactId>
+			<version>3.5.1.1</version>
+		</dependency>
+
+
 
 	</dependencies>
 
@@ -201,4 +208,11 @@
 			</plugin>
 		</plugins>
 	</build>
+	<repositories>
+		<repository>
+			<id>cksource-mvn-repo</id>
+			<name>CKSource Maven Repository</name>
+			<url>https://maven.cksource.com/</url>
+		</repository>
+	</repositories>
 </project>
