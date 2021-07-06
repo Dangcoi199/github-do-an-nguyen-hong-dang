@@ -47,14 +47,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception { 
 		http.csrf().disable()
-				.authorizeRequests().antMatchers("/admin/**",
-						"/admin_**") .access("hasAnyRole('ROLE_DEVELOPER', 'ROLE_ADMIN')")
+				.authorizeRequests()/*.antMatchers("/admin/**",
+						"/admin_**").access("hasAnyRole('ROLE_DEVELOPER', 'ROLE_ADMIN')")
 				
 				
 				  .antMatchers("/listUser","/addUser","/updateUser","/listBH","/addBH","/updateBH","/listKhoangGia"
 						  ,"/addKhoangGia","/updateKhoangGia","/listSlider","/addSlider","/updateSlider"
 						, "/listSale", "/addSale",
-						"/updateSale").authenticated()
+						"/updateSale").access("hasRole('ROLE_ADMIN')")*/
 				  
 				 
 				//Những url không cần xác thực
