@@ -3,8 +3,6 @@ package com.nguyenhongdang.controller.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,13 +14,11 @@ import com.nguyenhongdang.dto.OutPutPaginationProduct;
 import com.nguyenhongdang.dto.ProductTransferDTO;
 import com.nguyenhongdang.entity.SanPhamEntity;
 import com.nguyenhongdang.entity.SliderEntity;
-import com.nguyenhongdang.entity.UserEntity;
 import com.nguyenhongdang.service.admin.IBrandService;
 import com.nguyenhongdang.service.admin.IKhoangGiaService;
 import com.nguyenhongdang.service.admin.ILoaiDayService;
 import com.nguyenhongdang.service.admin.IProductTypeService;
 import com.nguyenhongdang.service.admin.ISliderService;
-import com.nguyenhongdang.service.admin.IUserService;
 import com.nguyenhongdang.service.web.ISanPhamService;
 import com.nguyenhongdang.service.web.ITinTucService;
 
@@ -50,17 +46,23 @@ public class ProductController {
 		OutPutPaginationProduct result = new OutPutPaginationProduct();
 		result.setPage(page);
 		int offset = page * limit - limit;
-		Authentication authentication = (Authentication) SecurityContextHolder.getContext().getAuthentication();
-		if (authentication.getPrincipal() != "anonymousUser") {
-			String userName = authentication.getName();
-			result.setTotalPage((int) Math.ceil((double) sanPhamService.getTotalItemRecommend(userName)/ limit));
-			List<ProductTransferDTO> sanPhamRecommends = sanPhamService.getRecommend(userName,offset,limit);			
-			result.setListResult(sanPhamRecommends);	
-		}else {
-			result.setTotalPage((int) Math.ceil((double) sanPhamService.getTotalItem()/ limit));			
-			List<ProductTransferDTO> products = sanPhamService.findAll(offset, limit);
-			result.setListResult(products);		
-		}		
+		/*
+		 * Authentication authentication = (Authentication)
+		 * SecurityContextHolder.getContext().getAuthentication(); if
+		 * (authentication.getPrincipal() != "anonymousUser") { String userName =
+		 * authentication.getName(); result.setTotalPage((int) Math.ceil((double)
+		 * sanPhamService.getTotalItemRecommend(userName)/ limit));
+		 * List<ProductTransferDTO> sanPhamRecommends =
+		 * sanPhamService.getRecommend(userName,offset,limit);
+		 * result.setListResult(sanPhamRecommends); }else { result.setTotalPage((int)
+		 * Math.ceil((double) sanPhamService.getTotalItem()/ limit));
+		 * List<ProductTransferDTO> products = sanPhamService.findAll(offset, limit);
+		 * result.setListResult(products); }
+		 */
+		
+		result.setTotalPage((int) Math.ceil((double) sanPhamService.getTotalItem()/ limit));			
+		List<ProductTransferDTO> products = sanPhamService.findAll(offset, limit);
+		result.setListResult(products);	
 		model.addAttribute("listProducts", result);
 		model.addAttribute("tinTucs", tinTucService.getThreeTinTuc());
 		model.addAttribute("gioiThieus", tinTucService.getThreeTinGioiThieu());
