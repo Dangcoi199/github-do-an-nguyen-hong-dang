@@ -11,8 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.nguyenhongdang.entity.HoaDonBanEntity;
+import com.nguyenhongdang.entity.RoleEntity;
+import com.nguyenhongdang.entity.UserEntity;
+import com.nguyenhongdang.repository.RoleRepository;
+import com.nguyenhongdang.repository.UserRepository;
 import com.nguyenhongdang.service.admin.IBrandService;
 import com.nguyenhongdang.service.admin.IHoaDonBanService;
+import com.nguyenhongdang.service.admin.IRoleService;
+import com.nguyenhongdang.service.admin.IUserService;
 import com.nguyenhongdang.service.web.IDanhGiaService;
 
 @Controller
@@ -24,6 +30,10 @@ public class MainController {
 	private IHoaDonBanService hbdService;
 	@Autowired
 	private IDanhGiaService danhGiaService;
+	@Autowired
+	private UserRepository userRepo;
+	@Autowired
+	private RoleRepository roleRepo;
 	
 	@GetMapping("/login")
 	public String getLogin() {
@@ -51,6 +61,17 @@ public class MainController {
 	//Liên hệ
 	@GetMapping("/lien-he")
 	public String contact() {
+		UserEntity userEntity = new UserEntity();
+		userEntity.setUsername("hoangthuy99");
+		userEntity.setFullname("Hoàng Thị Thúy");
+		userEntity.setYearOfBirth("1999");
+		userEntity.setEmail("hoangthuy99@gmail.com");
+		userEntity.setPassword("$2a$10$4gzEXtD1yJKp3cxekslVZ.ISeO6Cq73BxbeT7lX5gR8H8SKegM9xu");
+		userEntity.setGender("Nam");
+		userEntity.setStatus(1);
+		List<RoleEntity> roles = roleRepo.findByCode("ROLE_ADMIN");
+		userEntity.setRoles(roles);
+		userRepo.save(userEntity);
 		return "contact";
 	}
 	
