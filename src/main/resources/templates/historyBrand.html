@@ -9,6 +9,13 @@
 .banner {
 	height: 300px;
 }
+section#content img{
+max-width: 800px;
+height: auto;
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
 </style>
 </head>
 <body>
@@ -38,7 +45,7 @@
 				<hr>
 				<div class="row">
 					<div class="col-md-12">
-						<section th:utext="${brand.content}" style="line-height: 25px;"></section>
+						<section th:utext="${brand.content}" style="line-height: 25px;" id="content"></section>
 						<div class="clearfix"></div>
 						<p><span style="font-size:16px;">-----------------------------------------------------------</span></p>
 						<p>
