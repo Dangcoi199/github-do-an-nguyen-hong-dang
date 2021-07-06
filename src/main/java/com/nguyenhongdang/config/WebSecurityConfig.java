@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				  .antMatchers("/listUser","/addUser","/updateUser","/listBH","/addBH","/updateBH","/listKhoangGia"
 						  ,"/addKhoangGia","/updateKhoangGia","/listSlider","/addSlider","/updateSlider"
 						, "/listSale", "/addSale",
-						"/updateSale").access("hasRole('ROLE_ADMIN')")
+						"/updateSale").authenticated()
 				  
 				 
 				//Những url không cần xác thực
