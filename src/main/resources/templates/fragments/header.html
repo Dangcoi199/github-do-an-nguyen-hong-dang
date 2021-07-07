@@ -8,10 +8,11 @@
 				<div class="col-md-6 top-header-left">
 					<div class="drop">
 						<div class="box">
-							<div class="fb-share-button" data-href="http://localhost:8088/"
+							<div class="fb-share-button"
+								data-href="https://luxury-watches99.herokuapp.com/"
 								data-layout="button" data-size="small">
 								<a target="_blank"
-									href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A8088%2F&amp;src=sdkpreparse"
+									href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fluxury-watches99.herokuapp.com%2F&amp;src=sdkpreparse"
 									class="fb-xfbml-parse-ignore">Chia sẻ</a>
 							</div>
 						</div>
@@ -19,19 +20,16 @@
 					</div>
 				</div>
 				<div class="col-md-6 top-header-left">
-					 <div id="authentication_app"
-						sec:authorize="isAnonymous()">
+					<div id="authentication_app" sec:authorize="isAnonymous()">
 						<a style="margin-right: 15px; color: #fff;" th:href="@{/login}">Đăng
 							nhập</a> <a style="color: #fff;" th:href="@{/register}">Đăng ký</a>
 					</div>
-					<div id="author_app"
-						sec:authorize="isAuthenticated()">
-						<a style="margin-right: 15px; color: #fff;">Xin chào :
-						<span th:utext="${fullNameAccount}" id="username"></span>
-						</a> <a style="color: #fff;"
-							th:href="@{/logout}">Logout</a>
+					<div id="author_app" sec:authorize="isAuthenticated()">
+						<a style="margin-right: 15px; color: #fff;">Xin chào : <span
+							th:utext="${fullNameAccount}" id="username"></span>
+						</a> <a style="color: #fff;" th:href="@{/logout}">Logout</a>
 					</div>
-					
+
 
 					<div class="cart box_1">
 						<a th:href="@{/showcart}">
@@ -142,7 +140,8 @@
 									</div>
 								</div></li>
 							<li class="grid"><a
-								th:href="@{/productByGender(gender='Đồng hồ đôi')}">Đồng hồ đôi</a>
+								th:href="@{/productByGender(gender='Đồng hồ đôi')}">Đồng hồ
+									đôi</a>
 								<div class="mepanel" style="width: 100%">
 									<div class="row">
 										<div class="col1 me-one">
