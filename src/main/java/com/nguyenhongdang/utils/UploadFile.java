@@ -15,8 +15,7 @@ public class UploadFile {
 	public void saveFile(String file, HttpServletRequest request, String category, String fileName) throws IOException {
 
 		byte[] bytes = Base64.getDecoder().decode(file.getBytes());
-		//String dirFile = "src\\main\\resources\\static\\uploads\\" + category;
-		String dirFile = "https://luxury-watches99.herokuapp.com/uploads/" + category;
+		String dirFile = "src\\main\\resources\\static\\uploads\\" + category;
 		File fileDir = new File(dirFile);
 		if (!fileDir.exists()) {
 			fileDir.mkdirs();
