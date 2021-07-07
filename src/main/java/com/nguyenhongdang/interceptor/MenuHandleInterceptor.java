@@ -37,10 +37,11 @@ public class MenuHandleInterceptor implements HandlerInterceptor {
 		if (authentication.getPrincipal() != "anonymousUser") {
 			String userName = authentication.getName();
 			UserEntity entity = userService.getByUserName(userName);
-			if(entity != null) {
-				request.setAttribute("fullNameAccount", entity.getFullname());
+			String fullName = entity.getFullname();
+			if(fullName == null || fullName.isEmpty()) {
+				request.setAttribute("fullNameAccount", authentication.getName());				
 			}else {
-				request.setAttribute("fullNameAccount", authentication.getName());
+				request.setAttribute("fullNameAccount",fullName);
 			}
 			
 		}

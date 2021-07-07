@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.nguyenhongdang.constant.GenderConstant;
+import com.nguyenhongdang.constant.LoaiTaiKhoanConstant;
 import com.nguyenhongdang.conveter.UserConveter;
 import com.nguyenhongdang.dto.UserDTO;
 import com.nguyenhongdang.entity.RoleEntity;
@@ -41,6 +42,7 @@ public class UserService implements IUserService{
 		}else if(user.getGender() ==0) {
 			entity.setGender(GenderConstant.FEMALE);
 		}
+		entity.setLoaiTaiKhoan(LoaiTaiKhoanConstant.NORMAL);
 		entity.setRoles(roles);
 		entity = userRepository.save(entity);
 		return userConveter.toDTO(entity);

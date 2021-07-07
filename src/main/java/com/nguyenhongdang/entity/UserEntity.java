@@ -30,13 +30,13 @@ public class UserEntity extends BaseEntity {
 	@Column(name = "username", nullable = false)
 	private String username;
 	
-	@Column(name = "fullname", nullable = false)
+	@Column(name = "fullname")
 	private String fullname;
 	
-	@Column(name = "year_of_birth", nullable = false)
+	@Column(name = "year_of_birth")
 	private String yearOfBirth;
 
-	@Column(name = "email", nullable = false)
+	@Column(name = "email")
 	private String email;
 
 	@Column(name = "password", nullable = false)
@@ -47,6 +47,9 @@ public class UserEntity extends BaseEntity {
 
 	@Column(name = "status")
 	private Integer status;
+	
+	@Column(name = "loai_tai_khoan")
+	private String loaiTaiKhoan;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
@@ -120,6 +123,12 @@ public class UserEntity extends BaseEntity {
 	public void setYearOfBirth(String yearOfBirth) {
 		this.yearOfBirth = yearOfBirth;
 	}
-	
 
+	public String getLoaiTaiKhoan() {
+		return loaiTaiKhoan;
+	}
+
+	public void setLoaiTaiKhoan(String loaiTaiKhoan) {
+		this.loaiTaiKhoan = loaiTaiKhoan;
+	}
 }

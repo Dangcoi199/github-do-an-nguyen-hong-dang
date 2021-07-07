@@ -55,7 +55,7 @@ public class AdminController {
 	        userDetail.getAuthorities());
 	    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
-	    return "redirect:/lien-he";
+	    return "redirect:/";
 	  }
 	
 	@GetMapping(value = "/admin_index")

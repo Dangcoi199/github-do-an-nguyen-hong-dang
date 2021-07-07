@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
@@ -13,16 +16,29 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nguyenhongdang.constant.LoaiTaiKhoanConstant;
 import com.nguyenhongdang.dto.GooglePojo;
+import com.nguyenhongdang.entity.UserEntity;
+import com.nguyenhongdang.repository.UserRepository;
 
 @Component
 public class GoogleUtils {
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	EntityManager entityManager;
+	
+	@Autowired
+	private UserRepository userRepo;
 	
 	public String getToken(final String code) throws ClientProtocolException, IOException {
 	    String link = env.getProperty("google.link.get.token");
@@ -47,7 +63,18 @@ public class GoogleUtils {
 	    return googlePojo;
 	  }
 
-	public UserDetails buildUser(GooglePojo googlePojo) {
+	@Transactional
+	public UserDetails buildUser(GooglePojo googlePojo) {		
+		UserEntity entity = userRepo.findByUsername(googlePojo.getEmail());
+		if(entity == null) {
+			UserEntity newUser = new UserEntity();
+			newUser.setUsername(googlePojo.getEmail());
+			newUser.setPassword(passwordEncoder.encode(googlePojo.getId()));
+			newUser.setEmail(googlePojo.getEmail());
+			newUser.setStatus(1);
+			newUser.setLoaiTaiKhoan(LoaiTaiKhoanConstant.GOOGLE);
+			entityManager.persist(newUser);
+		}		
 		boolean enabled = true;
 		boolean accountNonExpired = true;
 		boolean credentialsNonExpired = true;
