@@ -101,11 +101,11 @@
 								data : JSON.stringify(data),
 								success : function(result) {
 									alert("Xác nhận đơn hàng thành công!")
-									window.location.href = "/admin_index";
+									window.location.href = "/admin_listHDB";
 								},
 								error : function(error) {
 									alert("Số lượng sản phẩm không đủ !");
-									window.location.href = "/admin_listOrderInfo";
+									window.location.href = "/admin_listHDB";
 								}
 							})
 						};

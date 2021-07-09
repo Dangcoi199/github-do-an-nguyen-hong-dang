@@ -1,7 +1,6 @@
 package com.nguyenhongdang.api.web;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,8 +18,6 @@ public class TokenAPI {
 	EntityManager entityManager;
 
 	@PostMapping("/save-token")
-
-	@Transactional
 	public TokenEntity insertToken(@RequestBody TokenEntity entity) {
 		return service.save(entity);
 	}

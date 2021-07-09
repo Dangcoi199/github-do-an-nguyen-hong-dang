@@ -23,7 +23,8 @@ public class Notification {
 	private ISanPhamRepository sanPhamRepo;
 	
 	public void sendNotification(List<String> tokens,String productCode)  {
-		String link = "http://localhost:8088/productDetail?code="+productCode;
+		String link = "http://localhost:8080/productDetail?code="+productCode;
+		System.out.println("Đã gửi đến :" + tokens.size());
 		MulticastMessage message = MulticastMessage.builder().putData("title", "Luxury Watches")
 				.putData("content", "Sản phẩm đã có hàng, quý khách hãy tham khảo !")
 				.putData("link", link)
@@ -47,6 +48,7 @@ public class Notification {
 			}
 			if(tokens.size() != 0) {
 				sendNotification(tokens, sanPham.getCode());
+				tokenRepo.deleteAll(tokenEntities);
 			}
 		}
 	}
@@ -55,7 +57,7 @@ public class Notification {
 		for(TokenEntity tokenEntity : tokenEntities) {
 			tokens.add(tokenEntity.getToken());
 		}
-		String link = "http://localhost:8088/productDetail?code="+productCode;
+		String link = "http://localhost:8080/productDetail?code="+productCode;
 		MulticastMessage message = MulticastMessage.builder().putData("title", "Luxury Watches")
 				.putData("content", "Sản phẩm đã có hàng, quý khách hãy tham khảo !")
 				.putData("link", link)

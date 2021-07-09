@@ -58,15 +58,16 @@
                })
                .then(function (token) {
                    console.log(token);
+                   console.log(productId);
                    var data = {};
                    data["token"] = token;
-                   data["product_id"] = productId;
+                   data["productId"] = productId;
                    $
 					.ajax({
 						url : '/save-token',
 						type : 'POST',
 						contentType : 'application/json',
-						data : JSON.stringify(formdata),
+						data : JSON.stringify(data),
 						dataType : 'json',
 						success : function(response) {
 							alert("Bạn sẽ nhận được thông báo khi có sản phẩm !");
@@ -254,7 +255,7 @@
 									</div>
 									<div class="clearfix"></div>
 									<div class="fb-like"
-										th:data-href="'http://localhost:8080/productDetail?code='+${product.code}"
+										data-href="https://developers.facebook.com/docs/plugins/"
 										data-width="" data-layout="standard" data-action="like"
 										data-size="small" data-share="true" style="margin-top: 15px;"></div>
 

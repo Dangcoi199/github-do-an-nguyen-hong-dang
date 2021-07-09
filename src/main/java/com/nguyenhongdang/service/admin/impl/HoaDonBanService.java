@@ -46,7 +46,7 @@ public class HoaDonBanService implements IHoaDonBanService {
 		entity.setOrderInfo(entityManager.find(OrderInfoEntity.class, id));
 		entity = hdbRepo.save(entity);
 		// Send mail
-		String content = "<a href='http://localhost:8088/order_detail_email?id=" + entity.getId()
+		String content = "<a href='http://localhost:8080/order_detail_email?id=" + entity.getId()
 				+ "' style='color:red;' >Chi tiết đơn hàng</a>"
 				+ "<img src='https://www.english-learning.net/wp-content/uploads/2020/04/thank_you_2.jpg' style='width: 20%; height: auto;'>";
 		sendMail.SendMail(orderInfo.getEmail(), content, "XÁC NHẬN ĐƠN HÀNG THÀNH CÔNG");
