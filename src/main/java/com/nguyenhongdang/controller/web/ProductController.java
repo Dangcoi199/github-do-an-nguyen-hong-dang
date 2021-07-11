@@ -40,26 +40,12 @@ public class ProductController {
 	private ITinTucService tinTucService;
 	@GetMapping(value = { "/","/trang-chu" })
 	public String index(Model model, @RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "limit", defaultValue = "8") int limit) {
+			@RequestParam(name = "limit", defaultValue = "4") int limit) {
 		List<SliderEntity> sliders = sliderService.getSlider();
 		model.addAttribute("sliders", sliders);
 		OutPutPaginationProduct result = new OutPutPaginationProduct();
 		result.setPage(page);
 		int offset = page * limit - limit;
-		/*
-		 * Authentication authentication = (Authentication)
-		 * SecurityContextHolder.getContext().getAuthentication(); if
-		 * (authentication.getPrincipal() != "anonymousUser") { String userName =
-		 * authentication.getName(); result.setTotalPage((int) Math.ceil((double)
-		 * sanPhamService.getTotalItemRecommend(userName)/ limit));
-		 * List<ProductTransferDTO> sanPhamRecommends =
-		 * sanPhamService.getRecommend(userName,offset,limit);
-		 * result.setListResult(sanPhamRecommends); }else { result.setTotalPage((int)
-		 * Math.ceil((double) sanPhamService.getTotalItem()/ limit));
-		 * List<ProductTransferDTO> products = sanPhamService.findAll(offset, limit);
-		 * result.setListResult(products); }
-		 */
-		
 		result.setTotalPage((int) Math.ceil((double) sanPhamService.getTotalItem()/ limit));			
 		List<ProductTransferDTO> products = sanPhamService.findAll(offset, limit);
 		result.setListResult(products);	

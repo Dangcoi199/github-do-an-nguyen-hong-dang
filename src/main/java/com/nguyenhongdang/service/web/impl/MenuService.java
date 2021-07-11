@@ -1,8 +1,13 @@
 package com.nguyenhongdang.service.web.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.nguyenhongdang.constant.GenderConstant;
 import com.nguyenhongdang.dto.MenuDTO;
 import com.nguyenhongdang.repository.IBrandRepository;
 import com.nguyenhongdang.repository.IKhoangGiaRepository;
