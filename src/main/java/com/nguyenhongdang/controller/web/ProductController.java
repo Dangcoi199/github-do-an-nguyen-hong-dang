@@ -40,7 +40,7 @@ public class ProductController {
 	private ITinTucService tinTucService;
 	@GetMapping(value = { "/","/trang-chu" })
 	public String index(Model model, @RequestParam(name = "page", defaultValue = "1") int page,
-			@RequestParam(name = "limit", defaultValue = "4") int limit) {
+			@RequestParam(name = "limit", defaultValue = "8") int limit) {
 		List<SliderEntity> sliders = sliderService.getSlider();
 		model.addAttribute("sliders", sliders);
 		OutPutPaginationProduct result = new OutPutPaginationProduct();
