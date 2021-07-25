@@ -57,17 +57,7 @@ public class Notification {
 		for(TokenEntity tokenEntity : tokenEntities) {
 			tokens.add(tokenEntity.getToken());
 		}
-		String link = "http://localhost:8080/productDetail?code="+productCode;
-		MulticastMessage message = MulticastMessage.builder().putData("title", "Luxury Watches")
-				.putData("content", "Sản phẩm đã có hàng, quý khách hãy tham khảo !")
-				.putData("link", link)
-				.addAllTokens(tokens)
-				.build();
-		try {
-			FirebaseMessaging.getInstance().sendMulticast(message);
-		} catch (FirebaseMessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		sendNotification(tokens, productCode);
+		tokenRepo.deleteAll(tokenEntities);
 	}
 }
