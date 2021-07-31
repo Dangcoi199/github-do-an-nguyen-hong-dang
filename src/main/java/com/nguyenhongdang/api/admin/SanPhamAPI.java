@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.nguyenhongdang.dto.DiscountDTO;
 import com.nguyenhongdang.dto.ProductSaleDTO;
 import com.nguyenhongdang.dto.SanPhamDTO;
 import com.nguyenhongdang.entity.SanPhamEntity;
@@ -40,6 +41,10 @@ public class SanPhamAPI {
 	@PutMapping("/updateProductStatus")
 	public SanPhamEntity updateStatus(@RequestBody long id)  {
 		return service.updateStatus(id);
+	}
+	@PostMapping("/addDiscount")
+	public DiscountDTO addDiscount(@Valid @RequestBody DiscountDTO dto)  {
+		return dto;		
 	}
 	
 }

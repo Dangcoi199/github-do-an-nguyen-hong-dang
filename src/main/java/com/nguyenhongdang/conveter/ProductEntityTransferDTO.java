@@ -126,4 +126,14 @@ public class ProductEntityTransferDTO {
 		dto.setLastModifiedDate(entity.getLastModifiedDate());
 		return dto;
 	}
+	public List<ProductTransferDTO> getListProductNotSale(List<SanPhamEntity> entities) {
+		List<ProductTransferDTO> dtos = this.transferDTO(entities);
+		List<ProductTransferDTO> products = new ArrayList<>();
+		for(ProductTransferDTO dto : dtos) {
+			if(dto.getSaleProduct() == null) {
+				products.add(dto);
+			}
+		}		
+		return products;
+	}
 }

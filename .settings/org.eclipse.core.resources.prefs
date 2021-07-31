@@ -13,6 +13,7 @@ encoding//src/main/resources/templates/admin/chatlieumat/showlist.html=UTF-8
 encoding//src/main/resources/templates/admin/chatlieuvo/add.html=UTF-8
 encoding//src/main/resources/templates/admin/chatlieuvo/edit.html=UTF-8
 encoding//src/main/resources/templates/admin/chatlieuvo/showlist.html=UTF-8
+encoding//src/main/resources/templates/admin/discount/add.html=UTF-8
 encoding//src/main/resources/templates/admin/fragments/header.html=UTF-8
 encoding//src/main/resources/templates/admin/hoadonban/detail.html=UTF-8
 encoding//src/main/resources/templates/admin/hoadonban/list_order_info.html=UTF-8
