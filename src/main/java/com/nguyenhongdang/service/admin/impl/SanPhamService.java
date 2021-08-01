@@ -5,15 +5,16 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.nguyenhongdang.constant.GenderConstant;
 import com.nguyenhongdang.conveter.SanPhamConveter;
-import com.nguyenhongdang.dto.ProductSaleDTO;
+import com.nguyenhongdang.dto.DiscountDTO;
 import com.nguyenhongdang.dto.SanPhamDTO;
+import com.nguyenhongdang.dto.UpdateDiscountDTO;
 import com.nguyenhongdang.entity.BaoHanhEntity;
 import com.nguyenhongdang.entity.BrandEntity;
 import com.nguyenhongdang.entity.ChatLieuMatEntity;
@@ -88,10 +89,10 @@ public class SanPhamService implements ISanPhamService {
 	private ISaleReposotory saleRepo;
 
 	@Autowired
-	private IProductSaleRepository productSaleRepo;
-
-	@Autowired
 	private IBaoHanhRepository baoHanhRepo;
+	
+	@Autowired
+	private IProductSaleRepository saleProductRepo;
 
 	@Override
 	public SanPhamEntity getOne(long id) {
@@ -217,20 +218,6 @@ public class SanPhamService implements ISanPhamService {
 	}
 
 	@Override
-	@Transactional
-	public ProductSaleDTO saveProductSale(ProductSaleDTO dto) {
-		ProductSaleEntity entityProductSale = new ProductSaleEntity();
-		entityProductSale.setBegin(stringToDate.stringtoDate(dto.getBegin()));
-		entityProductSale.setEnd(stringToDate.stringtoDate(dto.getEnd()));
-		SaleEntity sale = saleRepo.findByCode(dto.getSaleCode());
-		SanPhamEntity product = repository.findByCode(dto.getProductCode());
-		entityProductSale.setProduct(product);
-		entityProductSale.setSale(sale);
-		entityProductSale = productSaleRepo.save(entityProductSale);
-		return dto;
-	}
-
-	@Override
 	public SanPhamEntity findByName(String name) {
 		return repository.findByName(name);
 	}
@@ -246,5 +233,39 @@ public class SanPhamService implements ISanPhamService {
 			entity.setStatus(1);			
 		}
 		return repository.save(entity);
+	}
+
+	@Override
+	@Transactional
+	public DiscountDTO saveDiscount(DiscountDTO dto) {
+		for(long id : dto.getIds()) {
+			ProductSaleEntity productSale = new ProductSaleEntity();
+			productSale.setBegin(stringToDate.stringtoDate(dto.getBegin()));
+			productSale.setEnd(stringToDate.stringtoDate(dto.getEnd()));
+			SaleEntity saleEntity = saleRepo.findByCode(dto.getSaleCode());
+			productSale.setSale(saleEntity);
+			SanPhamEntity product = repository.getOne(id);
+			productSale.setProduct(product);
+			entityManager.persist(productSale);
+		}
+		return dto;
+	}
+
+	@Override
+	@Transactional
+	public UpdateDiscountDTO updateDiscount(UpdateDiscountDTO dto) {
+		ProductSaleEntity entity = entityManager.find(ProductSaleEntity.class,dto.getSaleProductId());
+		SaleEntity sale = saleRepo.findByCode(dto.getSaleCode());
+		entity.setSale(sale);
+		entity.setBegin(stringToDate.stringtoDate(dto.getBegin()));
+		entity.setEnd(stringToDate.stringtoDate(dto.getEnd()));
+		entityManager.merge(entity);
+		return dto;
+	}
+
+	@Override
+	@Transactional
+	public void deleteDiscount(long saleProductId) {
+		saleProductRepo.deleteById(saleProductId);
 	}
 }

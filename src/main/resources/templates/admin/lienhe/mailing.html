@@ -165,11 +165,11 @@ label {
 									data : JSON.stringify(data),
 									dataType : 'json',
 									success : function(response) {
-										alert("Thêm danh mục thành công");
-										window.location.href = "/admin_listChatLieuMat";
+										alert("Phản hồi thành công");
+										window.location.href = "/admin_listLienHe";
 									},
 									error : function(response) {
-										window.location.href = "/admin_listChatLieuMat";
+										window.location.href = "/admin_listLienHe";
 										alert("Lỗi hệ thống");
 									}
 								});

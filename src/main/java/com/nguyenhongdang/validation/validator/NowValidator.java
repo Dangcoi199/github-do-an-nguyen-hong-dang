@@ -1,5 +1,6 @@
 package com.nguyenhongdang.validation.validator;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.ConstraintValidator;
@@ -17,7 +18,10 @@ public class NowValidator implements ConstraintValidator<Now, String> {
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		Date date = stringToDate.stringtoDate(value);
 		Date now = new Date();
-		if(date.before(now) == false) {
+		SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd");
+		String nowStr= formatter.format(now);
+		Date now1 = stringToDate.stringtoDate(nowStr);
+		if(date.before(now1) == false) {
 			return true;
 		}
 		return false;

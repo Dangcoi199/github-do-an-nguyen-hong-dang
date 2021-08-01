@@ -81,24 +81,32 @@
 											<a data-toggle="modal"
 												th:data-target="'#detailImages'+${product.id}"> <img
 												alt="Ảnh" th:src="@{'/uploads/sanpham/'+${product.image}}"
-												style="width: 120px; height: auto;">
+												style="width: 60px; height: auto;">
 											</a>
 										</th:block> <th:block th:unless="${product.image}">
 											<span>Chưa có ảnh</span>
 										</th:block></td>
 									<td><th:block th:if="${product.saleProduct}">
-											<span th:utext="${product.saleProduct.sale.name}"
-												style="color: #c4161c;"></span>
+											<span
+												th:utext="${product.saleProduct.sale.name}"
+												style="color: #c4161c; margin-right: 5px;"></span>
+											<a class="btn btn-xs btn-primary"
+												th:href="@{/admin_updateProductSale(id=${product.id})}"> <i
+												class="fa fa-bookmark-o bigger-120"></i>
+											</a>
+
 										</th:block> <th:block th:unless="${product.saleProduct}">
 											<span>Chưa có giảm giá</span>
 										</th:block></td>
 									<td><th:block th:if="${product.status} == 1">
-											<button style="border: none; background: none;" th:value="${product.id}" onclick="updateStatus(this)">
+											<button style="border: none; background: none;"
+												th:value="${product.id}" onclick="updateStatus(this)">
 												<i class="fa fa-thumbs-up"></i>
 											</button>
 
 										</th:block> <th:block th:if="${product.status} == 0">
-											<button style="border: none; background: none;" th:value="${product.id}" onclick="updateStatus(this)">
+											<button style="border: none; background: none;"
+												th:value="${product.id}" onclick="updateStatus(this)">
 												<i class="fa fa-thumbs-down"></i>
 											</button>
 										</th:block></td>
@@ -114,10 +122,7 @@
 										<button class="btn btn-xs btn-danger" th:value="${product.id}"
 											onclick="warningBeforeDeleteOne(this)">
 											<i class="ace-icon fa fa-trash-o bigger-120"></i>
-										</button> <a class="btn btn-xs btn-primary"
-										th:href="@{/admin_addProductSale(id=${product.id})}"> <i
-											class="fa fa-bookmark-o bigger-120"></i>
-									</a>
+										</button>
 									</td>
 									<!-- Begin Modal Detail Images -->
 									<div class="modal fade bd-example-modal-lg"
@@ -148,6 +153,8 @@
 										</div>
 									</div>
 									<!-- End modal Detail Images -->
+
+
 
 									<!-- Begin Modal Product Detail -->
 									<div class="modal fade bd-example-modal-lg"
@@ -239,9 +246,8 @@
 														<div class="form-group col-md-6">
 															<label for="doChiuNuoc">Độ chịu nước:</label>
 															<th:block th:if="${product.doChiuNuoc}">
-																<span id="doChiuNuoc"
-																	th:utext="${product.doChiuNuoc}"></span>
-															
+																<span id="doChiuNuoc" th:utext="${product.doChiuNuoc}"></span>
+
 															</th:block>
 															<th:block th:unless="${product.doChiuNuoc}">
 																<span>Chưa có</span>
@@ -252,7 +258,7 @@
 															<th:block th:if="${product.duongKinhMat}">
 																<span id="duongKinhMat"
 																	th:utext="${product.duongKinhMat}"></span>
-															
+
 															</th:block>
 															<th:block th:unless="${product.duongKinhMat}">
 																<span>Chưa có</span>
@@ -416,8 +422,8 @@
 					}
 				})
 			};
-			function updateStatus(item){
-				var data= $(item).val();
+			function updateStatus(item) {
+				var data = $(item).val();
 				$.ajax({
 					url : '/updateProductStatus',
 					type : 'PUT',

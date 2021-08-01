@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.nguyenhongdang.constant.DoChiuNuocConstant;
 import com.nguyenhongdang.constant.DuongKinhMatConstant;
 import com.nguyenhongdang.conveter.ProductEntityTransferDTO;
+import com.nguyenhongdang.conveter.ProductToDiscount;
 import com.nguyenhongdang.dto.ProductTransferDTO;
+import com.nguyenhongdang.dto.UpdateDiscountDTO;
 import com.nguyenhongdang.entity.BaoHanhEntity;
 import com.nguyenhongdang.entity.BrandEntity;
 import com.nguyenhongdang.entity.ChatLieuMatEntity;
@@ -68,6 +70,9 @@ public class SanPhamController {
 	@Autowired
 	private ProductEntityTransferDTO productToDTO;
 	
+	@Autowired
+	private ProductToDiscount toDiscountDTO;
+	
 	
 	
 	@GetMapping(value = "/admin_listSanPham")
@@ -75,6 +80,8 @@ public class SanPhamController {
 		List<SanPhamEntity> productEntities = sanPhamService.findAll();
 		List<ProductTransferDTO> products = productToDTO.transferDTO(productEntities);
 		model.addAttribute("products", products);
+		List<SaleEntity> saleEvents = saleService.findAll();
+		model.addAttribute("saleEvents", saleEvents);
 		return "admin/sanpham/showlist";
 	}
 	@GetMapping(value = "/admin_addSanPham")
@@ -123,9 +130,10 @@ public class SanPhamController {
 		model.addAttribute("baoHanhs", baoHanhs);
 		return "admin/sanpham/edit";
 	}
-	@GetMapping(value = "/admin_addProductSale")
+	@GetMapping(value = "/admin_updateProductSale")
 	public String addSaleProduct(@RequestParam(value = "id") long id, Model model) {
-		SanPhamEntity product = sanPhamService.getOne(id);
+		SanPhamEntity productEntity = sanPhamService.getOne(id);
+		UpdateDiscountDTO product = toDiscountDTO.toDiscountDto(productEntity);
 		List<SaleEntity> saleEvents = saleService.findAll();
 		model.addAttribute("product", product);
 		model.addAttribute("saleEvents", saleEvents);

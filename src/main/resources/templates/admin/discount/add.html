@@ -41,10 +41,10 @@
 								<div class="row">
 									<div class="col-md-4"></div>
 									<div class="col-md-6">
-									<span class="form-message" id="messageIds"></span>
+										<span class="form-message" id="messageIds"></span>
 									</div>
-									
-								</div>								
+
+								</div>
 								<div class=" row">
 									<div class="form-group col-md-6">
 										<label for="saleCode">Chương trình khuyến mại:</label> <select
@@ -128,8 +128,43 @@
 			$("#checkAll1").click(function() {
 				$('input:checkbox').not(this).prop('checked', this.checked);
 			});
-			function submitFormSale() {
-				$("#formAddSale").submit();
+			 function submitFormSale(formdata) {
+				 $
+					.ajax({
+						url : '/addDiscount',
+						type : 'POST',
+						contentType : 'application/json',
+						data : JSON.stringify(formdata),
+						dataType : 'json',
+						success : function(response) {
+							window.location.href = "/admin_addDiscount";
+							swal({
+								title : "Thành công!",
+								text : "Thêm giảm giá thành công.",
+								type : "success",
+								timer : 100000
+							});
+						},
+						error : function(response) {
+							var data = JSON
+									.parse(response.responseText);
+							if (data.status == 400) {
+								if (data.validationErrors.begin != null) {
+									document
+											.getElementById("messageBegin").innerHTML = data.validationErrors.begin;
+								} else if (data.validationErrors.end != null) {
+									document
+											.getElementById("messageEnd").innerHTML = data.validationErrors.end;
+								} else if (data.validationErrors.ids != null) {
+									document
+											.getElementById("messageIds").innerHTML = data.validationErrors.ids;
+								}
+							} else {
+								window.location.href = "/admin_listSanPham";
+								alert(response);
+							}
+						}
+					});
 			}
 			Validator({
 				form : '#formAddSale',
@@ -150,47 +185,27 @@
 													.querySelector('#formAddSale #begin').value;
 										}, 'Ngày kết thúc sau ngày bắt đầu !'), ],
 				onSubmit : function(formdata) {
-					var ids = $('tbody input[type=checkbox]:checked')
-					.map(function() {
-						return $(this).val();
-					}).get();
-					formdata["ids"] = ids;
-					console.log(formdata);
-					$
-							.ajax({
-								url : '/addDiscount',
-								type : 'POST',
-								contentType : 'application/json',
-								data : JSON.stringify(formdata),
-								dataType : 'json',
-								success : function(response) {
-									alert("Thêm thành công mã giảm giá !");
-									window.location.href = "/admin_listSanPham";
-								},
-								error : function(response) {
-									var data = JSON
-											.parse(response.responseText);
-									if (data.status == 400) {
-										if (data.validationErrors.begin != null) {
-											document
-													.getElementById("messageBegin").innerHTML = data.validationErrors.begin;
-										}
-										else if (data.validationErrors.end != null) {
-											document
-													.getElementById("messageEnd").innerHTML = data.validationErrors.end;
-										}
-										else if (data.validationErrors.ids != null) {
-											document
-													.getElementById("messageIds").innerHTML = data.validationErrors.ids;
-										}
-									} else {
-										window.location.href = "/admin_listSanPham";
-										alert(response);
-									}
+					 swal({
+						title : "Bạn có muốn thêm giảm giá?",
+						text : "Bạn có chắc chắn muốn thêm không ?",
+						icon : "warning",
+						buttons : true,
+						dangerMode : true,
+					}).then(
+							function(isConfirm) {
+								if (isConfirm) {
+									var ids = $(
+											'tbody input[type=checkbox]:checked')
+											.map(function() {
+												return $(this).val();
+											}).get();
+									formdata["ids"] = ids;
+									console.log(formdata);
+									submitFormSale(formdata);
 								}
-							});
+							})
 				}
-			});
+			}); 
 		</script>
 	</div>
 </body>

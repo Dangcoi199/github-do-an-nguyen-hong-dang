@@ -4,8 +4,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.nguyenhongdang.dto.ProductSaleDTO;
+import com.nguyenhongdang.dto.DiscountDTO;
 import com.nguyenhongdang.dto.SanPhamDTO;
+import com.nguyenhongdang.dto.UpdateDiscountDTO;
 import com.nguyenhongdang.entity.SanPhamEntity;
 
 public interface ISanPhamService {
@@ -24,12 +25,18 @@ public interface ISanPhamService {
 	// Xóa sản phẩm
 	void delete(long[] ids);
 
-	// Lưu mã giảm giá cho sản phẩm
-	ProductSaleDTO saveProductSale(ProductSaleDTO dto);
-
 	// Lấy sản phẩm theo tên
 	SanPhamEntity findByName(String name);
 	
 	//Update trạng thái;
 	SanPhamEntity updateStatus(long id);
+	
+	//Thêm mã giảm giá 
+	DiscountDTO saveDiscount(DiscountDTO dto);
+	
+	//Update mã giảm giá
+	UpdateDiscountDTO updateDiscount(UpdateDiscountDTO dto);
+	
+	//Xóa mã giảm giá
+	void deleteDiscount(long saleProductId);
 }

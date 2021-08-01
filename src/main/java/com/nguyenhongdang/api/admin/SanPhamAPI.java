@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nguyenhongdang.dto.DiscountDTO;
-import com.nguyenhongdang.dto.ProductSaleDTO;
 import com.nguyenhongdang.dto.SanPhamDTO;
+import com.nguyenhongdang.dto.UpdateDiscountDTO;
 import com.nguyenhongdang.entity.SanPhamEntity;
 import com.nguyenhongdang.service.admin.ISanPhamService;
 
@@ -33,10 +33,8 @@ public class SanPhamAPI {
 		service.delete(ids);
 	}
 	@PostMapping("/productSales")
-	public ProductSaleDTO addProductSale(@Valid @RequestBody ProductSaleDTO dto)  {
-		System.out.println("Code"+dto.getValidator()[0]);
-		System.out.println("Date"+dto.getValidator()[1]);
-		return service.saveProductSale(dto);
+	public UpdateDiscountDTO addProductSale(@Valid @RequestBody UpdateDiscountDTO dto)  {		
+		return service.updateDiscount(dto);
 	}
 	@PutMapping("/updateProductStatus")
 	public SanPhamEntity updateStatus(@RequestBody long id)  {
@@ -44,7 +42,11 @@ public class SanPhamAPI {
 	}
 	@PostMapping("/addDiscount")
 	public DiscountDTO addDiscount(@Valid @RequestBody DiscountDTO dto)  {
-		return dto;		
+		return service.saveDiscount(dto);	
+	}
+	@DeleteMapping("/deleteDiscount")
+	public void delete(@RequestBody long saleProductId) {
+		service.deleteDiscount(saleProductId);
 	}
 	
 }

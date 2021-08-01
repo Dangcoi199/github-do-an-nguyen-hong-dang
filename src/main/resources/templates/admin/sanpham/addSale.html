@@ -4,6 +4,9 @@
 	layout:decorate="~{admin/fragments/layout}">
 <head>
 <title>Khuyến mại</title>
+<link th:href="@{admin/sweetalert2/sweetalert2.min.css}"
+	rel="stylesheet">
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link th:href="@{admin/css/user/update.css}" rel="stylesheet">
 </head>
 <body id="page-top">
@@ -33,17 +36,18 @@
 							<div class="form-group col-md-6">
 								<label for="name" class="form-label">Tên sản phảm</label> <input
 									id="name" name="name" type="text" class="form-control"
-									disabled="disabled" th:value="${product.name}">
+									disabled="disabled" th:value="${product.productName}">
 							</div>
 						</div>
 						<div class=" row">
 							<div class="form-group col-md-6">
 								<label for="saleCode">Chương trình khuyến mại:</label> <select
 									id="saleCode" name="saleCode" class="form-control">
-									<option value="">------CHỌN CHƯƠNG TRÌNH-----</option>
+									<option value="">------ CHỌN CHƯƠNG TRÌNH -----</option>
 									<th:block th:each="saleEvent : ${saleEvents}">
 										<option th:value="${saleEvent.code}"
-											th:utext="${saleEvent.name}"></option>
+											th:utext="${saleEvent.name}"
+											th:selected="(${product.saleCode} == ${saleEvent.code})"></option>
 									</th:block>
 								</select> <span class="form-message"></span>
 							</div>
@@ -51,23 +55,26 @@
 						<div class="form-group row">
 							<div class="form-group col-md-6">
 								<label for="price" class="form-label">Ngày bắt đầu:</label> <input
-									id="begin" name="begin" type="date" class="form-control">
-								<span class="form-message" id="messageBegin"></span>
+									id="begin" name="begin" type="date" class="form-control"
+									th:value="${product.begin}"> <span class="form-message"
+									id="messageBegin"></span>
 							</div>
 							<div class="form-group col-md-6">
 								<label for="price" class="form-label">Ngày kết thúc:</label> <input
-									id="end" name="end" type="date" class="form-control"> <span
-									class="form-message" id="messageEnd"></span>
+									id="end" name="end" type="date" class="form-control"
+									th:value="${product.end}"> <span class="form-message"
+									id="messageEnd"></span>
 							</div>
 						</div>
-						<input type="hidden" th:value="${product.code}" id="productCode"
-							name="productCode">
-							<input type="hidden" th:value="${product.id}" id="productId"
-							name="productId">
-							<div class="row">
+						<input type="hidden" th:value="${product.saleProductId}"
+							 name="saleProductId" id="saleProductId">
+						<div class="row">
 							<div class="col-md-12">
-								<button type="submit" class="btn btn-primary"
-									style="margin: 30px;" id="btnAddUser">Thêm mới</button>
+								<button type="button" onclick="warningBeforeDelete()"
+									data-toggle="tooltip" class="btn btn-danger">Xóa giảm
+									giá</button>
+								<button type="submit" class="btn btn-primary">Lưu thay
+									đổi</button>
 							</div>
 						</div>
 					</form>
@@ -77,9 +84,21 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-			function submitFormSale() {
-				$("#formAddSale").submit();
-			}
+			function warningBeforeDelete() {
+				swal({
+					title : "Bạn có muốn xóa?",
+					text : "Bạn có chắc chắn muốn xóa ?",
+					icon : "warning",
+					buttons : true,
+					dangerMode : true,
+				}).then(function(isConfirm) {
+					if (isConfirm) {
+						var saleProductId = $('#saleProductId').val();
+						console.log(saleProductId);
+						deleteDiscount(saleProductId);
+					}
+				})
+			};
 			Validator({
 				form : '#formAddSale',
 				formGroupSelect : '.form-group',
@@ -99,14 +118,8 @@
 													.querySelector('#formAddSale #begin').value;
 										}, 'Ngày kết thúc sau ngày bắt đầu !'), ],
 				onSubmit : function(formdata) {
-					var validator=[];
-					var productId = formdata["productId"];
-					var beginDate =formdata["begin"];
-					validator.push(productId);
-					validator.push(beginDate);
-					formdata["validator"] = validator;
 					console.log(formdata);
-					 $
+					$
 							.ajax({
 								url : '/productSales',
 								type : 'POST',
@@ -114,8 +127,13 @@
 								data : JSON.stringify(formdata),
 								dataType : 'json',
 								success : function(response) {
-									alert("Thêm thành công mã giảm giá !");
 									window.location.href = "/admin_listSanPham";
+									swal({
+										title : "Thành công!",
+										text : "Cập nhật thành công.",
+										type : "success",
+										timer : 100000
+									});
 								},
 								error : function(response) {
 									var data = JSON
@@ -124,16 +142,10 @@
 										if (data.validationErrors.begin != null) {
 											document
 													.getElementById("messageBegin").innerHTML = data.validationErrors.begin;
-										}
-										else if (data.validationErrors.end != null) {
+										} else if (data.validationErrors.end != null) {
 											document
 													.getElementById("messageEnd").innerHTML = data.validationErrors.end;
 										}
-										else if (data.validationErrors.validator != null) {
-											document
-													.getElementById("messageBegin").innerHTML = data.validationErrors.validator;
-										}
-
 									} else {
 										window.location.href = "/admin_listSanPham";
 										alert(response);
@@ -142,6 +154,27 @@
 							});
 				}
 			});
+			function deleteDiscount(data) {
+				$.ajax({
+					url : '/deleteDiscount',
+					type : 'DELETE',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					success : function(result) {
+						window.location.href = "/admin_listSanPham";
+						swal({
+							title : "Deleted!",
+							text : "Your row has been deleted.",
+							type : "success",
+							timer : 100000
+						});
+					},
+					error : function(error) {
+						window.location.href = "/admin_listSanPham";
+						alert("Lỗi hệ thống");
+					}
+				})
+			};
 		</script>
 </body>
 </html>

@@ -368,14 +368,8 @@
 															Giá ưu đãi <span class="price-cell-r price basic_price"
 																style="margin-top: 10px;"> <span
 																th:utext="(${#numbers.formatDecimal(product.priceSale, 0, 'COMMA', 0, 'POINT')} + ' VNĐ')"></span>
-																<br> <th:block
-																	th:switch="${product.saleProduct.sale.name}">
-																	<span th:case="'Giảm giá 50%'">- 50%</span>
-																	<span th:case="'Giảm giá 40%'">- 40%</span>
-																	<span th:case="'Giảm giá 20%'">- 20%</span>
-																	<span th:case="'Giảm giá 30%'">- 30%</span>
-																	<span th:case="'Giảm giá 10%'">- 10%</span>
-																</th:block>
+																<br> <span
+																th:utext="${product.saleProduct.sale.name}">- 50%</span>
 															</span>
 														</div>
 														<div class="price-row">
