@@ -76,7 +76,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("username")//
 				.passwordParameter("password").and().exceptionHandling().accessDeniedPage("/403")
 				// Cấu hình cho Logout Page.
-				.and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+				.and().logout().logoutUrl("/logout").logoutSuccessUrl("/trang-chu");
+		
+		// Cấu hình remember me, thời gian là 1296000 giây
+	    http.rememberMe().key("uniqueAndSecret").tokenValiditySeconds(1296000);
+	    
 		// Thêm một lớp Filter kiểm tra jwt
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

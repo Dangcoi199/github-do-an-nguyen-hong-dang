@@ -23,7 +23,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nguyenhongdang.constant.LoaiTaiKhoanConstant;
 import com.nguyenhongdang.dto.GooglePojo;
+import com.nguyenhongdang.entity.RoleEntity;
 import com.nguyenhongdang.entity.UserEntity;
+import com.nguyenhongdang.repository.RoleRepository;
 import com.nguyenhongdang.repository.UserRepository;
 
 @Component
@@ -39,6 +41,8 @@ public class GoogleUtils {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired RoleRepository roleRepo;
 	
 	public String getToken(final String code) throws ClientProtocolException, IOException {
 	    String link = env.getProperty("google.link.get.token");
@@ -73,6 +77,8 @@ public class GoogleUtils {
 			newUser.setEmail(googlePojo.getEmail());
 			newUser.setStatus(1);
 			newUser.setLoaiTaiKhoan(LoaiTaiKhoanConstant.GOOGLE);
+			List<RoleEntity> roles = roleRepo.findByCode("ROLE_MEMBER");
+			newUser.setRoles(roles);
 			entityManager.persist(newUser);
 		}		
 		boolean enabled = true;

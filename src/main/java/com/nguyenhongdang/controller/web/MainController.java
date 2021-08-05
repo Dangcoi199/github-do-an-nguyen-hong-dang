@@ -33,7 +33,10 @@ public class MainController {
 	public String register() {
 		return "register";
 	}
-
+	@GetMapping("/403")
+	public String page403() {
+		return "page403";
+	}
 	/* Lịch sử thương hiệu */
 	@GetMapping("/historyBrand")
 	public String historyBrand(Model model,@RequestParam(name = "brandCode") String brandCode) {
