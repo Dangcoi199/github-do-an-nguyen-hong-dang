@@ -255,8 +255,9 @@
 									</div>
 									<div class="clearfix"></div>
 									<!-- th:data-href="'http://localhost:8080/productDetail?code='+${product.code}" -->
+									<!-- data-href="https://developers.facebook.com/docs/plugins/" -->
 									<div class="fb-like"
-										data-href="https://developers.facebook.com/docs/plugins/"
+										th:data-href="'https://localhost:8443/productDetail?code='+${product.code}"
 										data-width="" data-layout="standard" data-action="like"
 										data-size="small" data-share="true" style="margin-top: 15px;">
 									</div>
@@ -560,7 +561,7 @@
 										</div>
 									</div>
 									<div class="fb-comments"
-										th:data-href="'http://localhost:8080/productDetail?code='+${product.code}"
+										th:data-href="'https://localhost:8443/productDetail?code='+${product.code}"
 										data-width="800" data-numposts="5"></div>
 								</div>
 							</div>

@@ -14,9 +14,11 @@
 	font-weight: bold;
 	color: #662d91;
 }
+
 .relativepro {
 	margin-top: 30px;
 }
+
 .title_tintuc a {
 	font-size: 16px;
 	font-family: UTMAvoBold;
@@ -157,8 +159,8 @@
 						</form>
 
 						<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
+							var totalPages = parseInt($("#totalPage").val());
+							var currentPage = parseInt($("#page").val());
 							$(function() {
 								window.pagObj = $('#pagination')
 										.twbsPagination(

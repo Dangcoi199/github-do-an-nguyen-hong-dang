@@ -25,6 +25,7 @@ import com.nguyenhongdang.service.admin.IOrderInfoService;
 import com.nguyenhongdang.service.admin.IRoleService;
 import com.nguyenhongdang.service.admin.IUserService;
 import com.nguyenhongdang.utils.GoogleUtils;
+import com.nguyenhongdang.utils.RestFB;
 
 @Controller
 public class AdminController {
@@ -39,6 +40,25 @@ public class AdminController {
 	
 	@Autowired
 	private GoogleUtils googleUtil;
+	
+	@Autowired
+	private RestFB restFb;
+	
+	@RequestMapping("/login-facebook")
+	public String loginFacebook(HttpServletRequest request) throws ClientProtocolException, IOException {
+		String code = request.getParameter("code");
+		if (code == null || code.isEmpty()) {
+			return "redirect:/login?facebook=error";
+		}
+		String accessToken = restFb.getToken(code);		
+		com.restfb.types.User user = restFb.getUserInfo(accessToken);
+		UserDetails userDetail = restFb.buildUser(user);
+		UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
+				userDetail.getAuthorities());
+		authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return "redirect:/";
+	}
 	
 	@RequestMapping("/login-google")
 	  public String loginGoogle(HttpServletRequest request) throws ClientProtocolException, IOException {

@@ -125,18 +125,18 @@
 						<form th:action="@{/phien-ban-dac_biet}" method='GET'
 							id="formSubmit">
 							<input type="hidden" id="gender" name="gender"
-								th:value="${gender}" />
-							<input type="hidden" id="page" name="page"
-								th:value="${listProducts.page}" /> <input type="hidden"
-								id="loaiDayCode" name="loaiDayCode" th:value="${loaiDayCode}" />
-							<input type="hidden" id="khoangGiaCode" name="khoangGiaCode"
+								th:value="${gender}" /> <input type="hidden" id="page"
+								name="page" th:value="${listProducts.page}" /> <input
+								type="hidden" id="loaiDayCode" name="loaiDayCode"
+								th:value="${loaiDayCode}" /> <input type="hidden"
+								id="khoangGiaCode" name="khoangGiaCode"
 								th:value="${khoangGiaCode}" /> <input type="hidden"
 								id="brandCode" name="brandCode" th:value="${brandCode}" />
 						</form>
 
 						<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
+							var totalPages = parseInt($("#totalPage").val());
+							var currentPage = parseInt($("#page").val());
 							$(function() {
 								window.pagObj = $('#pagination')
 										.twbsPagination(
@@ -174,15 +174,16 @@
 										<label class="checkbox"> <input type="radio"
 											name="radioGender" value="all" checked="checked"><i></i><span>Tất
 												cả</span>
-										</label>
-										<label class="checkbox"> <input type="radio"
-											name="radioGender" value="Nam" th:checked="(${gender} == 'Nam')"><i></i><span>Nam</span>
-										</label>
-										<label class="checkbox"> <input type="radio"
-											name="radioGender" value="Nữ" th:checked="(${gender} == 'Nữ')"><i></i><span>Nữ</span>
-										</label>
-										<label class="checkbox"> <input type="radio"
-											name="radioGender" value="Đồng hồ đôi" th:checked="(${gender} == 'Đồng hồ đôi')"><i></i><span>Đồng hồ đôi</span>
+										</label> <label class="checkbox"> <input type="radio"
+											name="radioGender" value="Nam"
+											th:checked="(${gender} == 'Nam')"><i></i><span>Nam</span>
+										</label> <label class="checkbox"> <input type="radio"
+											name="radioGender" value="Nữ"
+											th:checked="(${gender} == 'Nữ')"><i></i><span>Nữ</span>
+										</label> <label class="checkbox"> <input type="radio"
+											name="radioGender" value="Đồng hồ đôi"
+											th:checked="(${gender} == 'Đồng hồ đôi')"><i></i><span>Đồng
+												hồ đôi</span>
 										</label>
 									</div>
 								</div>
@@ -195,8 +196,7 @@
 									for (var i = 0; i < checkbox.length; i++) {
 										if (checkbox[i].checked === true) {
 											$('#page').val(null);
-											$('#gender').val(
-													checkbox[i].value);
+											$('#gender').val(checkbox[i].value);
 											$('#formSubmit').submit();
 										}
 									}

@@ -140,8 +140,8 @@
 						</form>
 
 						<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
+							var totalPages = parseInt($("#totalPage").val());
+							var currentPage = parseInt($("#page").val());
 							var gender = $("#gender").val();
 							$(function() {
 								window.pagObj = $('#pagination')

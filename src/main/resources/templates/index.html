@@ -143,10 +143,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12 relativepro">
-						<div class="product_related_title" sec:authorize="isAuthenticated()">
-							<span>CÓ THỂ BẠN SẼ THÍCH</span>
-						</div>
-						<div class="product_related_title" sec:authorize="isAnonymous()">
+						<div class="product_related_title">
 							<span>SẢN PHẨM NỔI BẬT</span>
 						</div>
 					</div>
@@ -156,7 +153,6 @@
 			<div class="product">
 				<div class="container">
 					<div class="product-top">
-
 						<th:block th:each="product : ${listProducts.listResult}">
 							<div class="col-md-3 product-left" style="margin-bottom: 3%;">
 								<div class="product-main simpleCart_shelfItem">
@@ -212,15 +208,15 @@
 						</nav>
 						<input type="hidden" id="totalPage" name="totalPage"
 							th:value="${listProducts.totalPage}" />
-						<form th:action="@{/}" method='GET' id="formSubmit">
+						<form th:action="@{/trang-chu}" method='GET' id="formSubmit">
 							<input type="hidden" id="page" name="page"
 								th:value="${listProducts.page}" />
 						</form>
 
 						<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
 							$(function() {
+								var totalPages = parseInt($("#totalPage").val());
+								var currentPage = parseInt($("#page").val());							
 								window.pagObj = $('#pagination')
 										.twbsPagination(
 												{
@@ -261,7 +257,7 @@
 									th:href="@{/tin_tuc(code=${gioiThieu.code})}">
 									<img
 									alt="Ảnh"
-									style="display: inline-block; width: 100%; height: 270px;"
+									style="display: inline-block; width: 100%; height: 240px;"
 									class="lazy" th:src="@{'/uploads/tintuc/'+${gioiThieu.image}}">
 								</a>
 								<div class="title_tintuc">
@@ -287,7 +283,7 @@
 									th:href="@{/tin_tuc(code=${tinTuc.code})}">
 									<img
 									alt="Ảnh"
-									style="display: inline-block; width: 100%; height: 270px;"
+									style="display: inline-block; width: 100%; height: 240px;"
 									class="lazy" th:src="@{'/uploads/tintuc/'+${tinTuc.image}}">
 								</a>
 								<div class="title_tintuc">

@@ -194,6 +194,12 @@
 			<artifactId>messenger4j</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+		<!-- restfb -->
+		<dependency>
+			<groupId>com.restfb</groupId>
+			<artifactId>restfb</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 	</dependencies>
 
 

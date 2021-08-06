@@ -38,12 +38,12 @@ public class MenuHandleInterceptor implements HandlerInterceptor {
 			String userName = authentication.getName();
 			UserEntity entity = userService.getByUserName(userName);
 			String fullName = entity.getFullname();
-			if(fullName == null || fullName.isEmpty()) {
-				request.setAttribute("fullNameAccount", authentication.getName());				
-			}else {
-				request.setAttribute("fullNameAccount",fullName);
+			if (fullName == null || fullName.isEmpty()) {
+				request.setAttribute("fullNameAccount", authentication.getName());
+			} else {
+				request.setAttribute("fullNameAccount", fullName);
 			}
-			
+
 		}
 
 		return true;

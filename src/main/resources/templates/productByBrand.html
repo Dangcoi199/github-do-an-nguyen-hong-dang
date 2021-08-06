@@ -187,8 +187,8 @@
 						</form>
 
 						<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
+							var totalPages = parseInt($("#totalPage").val());
+							var currentPage = parseInt($("#page").val());
 							var gender = $("#gender").val();
 							$(function() {
 								window.pagObj = $('#pagination')
@@ -337,24 +337,24 @@
 						<section th:utext="${brand.shortDescription}"
 							id="shortDescription" class="shortDescription"
 							style="line-height: 24px; margin-bottom: 3%; margin-top: 2%"></section>
-						<section
-							id="fullshortDescription" class="fullshortDescription"
+						<section id="fullshortDescription" class="fullshortDescription"
 							style="margin-bottom: 3%; margin-top: 2%">
 							<section th:utext="${brand.shortDescription}"></section>
-							<p><span style="font-size:16px;">-----------------------------------------------------------</span></p>
 							<p>
-							<span style="font-size: 16px;">Để được tư vấn cụ
-								thể,&nbsp;Quý khách hàng liên hệ tới <a href="https://galle.vn/"
-								target="_blank">Luxury Watches</a> qua:<br> <strong>Hotline:</strong>
-								<span style="color: #FF0000;">0982565569</span><br> 
-								<a href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
-								https://www.facebook.com/dang0599/</a>
-									<br>
-									<strong>Hệ thống Showroom:</strong>
-								<a
-								href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
-							</span>
-						</p>
+								<span style="font-size: 16px;">-----------------------------------------------------------</span>
+							</p>
+							<p>
+								<span style="font-size: 16px;">Để được tư vấn cụ
+									thể,&nbsp;Quý khách hàng liên hệ tới <a
+									href="https://galle.vn/" target="_blank">Luxury Watches</a>
+									qua:<br> <strong>Hotline:</strong> <span
+									style="color: #FF0000;">0982565569</span><br> <a
+									href="https://www.facebook.com/dang0599"><strong>Facebook:</strong>
+										https://www.facebook.com/dang0599/</a> <br> <strong>Hệ
+										thống Showroom:</strong> <a
+									href="https://galle.vn/he-thong-cua-hang.html">https://galle.vn/he-thong-cua-hang.html</a>
+								</span>
+							</p>
 						</section>
 						<div class="view-more" onclick="fullText()">Xem thêm ...</div>
 						<div class="rut-gon" onclick="RutGon()">Rút gọn</div>

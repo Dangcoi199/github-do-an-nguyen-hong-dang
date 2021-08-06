@@ -92,40 +92,29 @@
 						<ul class="pagination" id="pagination"></ul>
 					</nav>
 					<input type="hidden" id="totalPage" name="totalPage"
-							th:value="${totalPage}" />
-						<form th:action="@{/danh-muc-tin}" method='GET' id="formSubmit">
-							<input type="hidden" id="page" name="page"
-								th:value="${page}" />
-						</form>
+						th:value="${totalPage}" />
+					<form th:action="@{/danh-muc-tin}" method='GET' id="formSubmit">
+						<input type="hidden" id="page" name="page" th:value="${page}" />
+					</form>
 					<script>
-							var totalPages = $("#totalPage").val();
-							var currentPage = $("#page").val();
-							$(function() {
-								window.pagObj = $('#pagination')
-										.twbsPagination(
-												{
-													totalPages : totalPages,
-													visiblePages : 3,
-													startPage : currentPage,
-													onPageClick : function(
-															event, page) {
-														if (currentPage != page) {
-															$('#page')
-																	.val(page);
-															$('#formSubmit')
-																	.submit();
-														}
-													}
-												})
-										.on(
-												'page',
-												function(event, page) {
-													console
-															.info(page
-																	+ ' (from event listening)');
-												});
+						var totalPages = parseInt($("#totalPage").val());
+						var currentPage = parseInt($("#page").val());
+						$(function() {
+							window.pagObj = $('#pagination').twbsPagination({
+								totalPages : totalPages,
+								visiblePages : 3,
+								startPage : currentPage,
+								onPageClick : function(event, page) {
+									if (currentPage != page) {
+										$('#page').val(page);
+										$('#formSubmit').submit();
+									}
+								}
+							}).on('page', function(event, page) {
+								console.info(page + ' (from event listening)');
 							});
-						</script>
+						});
+					</script>
 				</div>
 				<div class="col-md-3">
 					<div class="doc_nhieu">

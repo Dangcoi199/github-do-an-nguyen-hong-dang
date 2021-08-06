@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Minimal login form Responsive Widget Template : W3Layouts</title>
+    <title>Đăng nhập</title>
 
     <!-- Meta tags -->
     <meta charset="UTF-8">
@@ -20,7 +20,18 @@
     <div class="w3l-loginblock signinform">
         <div class="logo">
             <a class="brand-logo" href="index.html">Đăng nhập</a>
-        </div>
+            <div style="margin-top: 1%; font-size: 18px; color: #d92c2c;">
+            	<div th:if="${param.error}" class="alert alert-danger">
+              		Tài khoản hoặc mật khẩu không đúng !
+              </div>
+              <div th:if="${param.logout}" class="alert alert-success">
+              		Đăng xuất thành công !
+              </div>
+              <div th:if="${param.register}" class="alert alert-success">
+              		Đăng nhập vào tài khoản mới đăng ký !
+              </div>
+            </div>
+        </div>        
         <!-- main content -->
             <div class="row map-content-9">
                 <div class="info-grids">
@@ -46,10 +57,9 @@
                 <div class="info-grids social-login-details align-self">
                     <p class="text-center mb-3">Or login with</p>
                     <div class="social-media">
-                        <a href="#facebook" class="fb"><span class="fa fa-facebook" aria-hidden="true"></span> Login
+                        <a href="https://www.facebook.com/dialog/oauth?client_id=625735515069002&redirect_uri=https://localhost:8443/login-facebook" class="fb"><span class="fa fa-facebook" aria-hidden="true"></span> Login
                             with facebok</a>
-                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/login-google&response_type=code
-    &client_id=768531512919-b9bhn2a4jhfr98987qt8a9r09v5obkhi.apps.googleusercontent.com&approval_prompt=force" class="tw"><span class="fa fa-google" aria-hidden="true"></span>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=https://localhost:8443/login-google&response_type=code&client_id=48503743038-i6gict1q4km7n2doe26bdies74j9ldhr.apps.googleusercontent.com&approval_prompt=force" class="tw"><span class="fa fa-google" aria-hidden="true"></span>
                             Login with google</a>
                     </div>
                     <p class="text-center mt-4">Not yet registered? <a th:href="@{/register}">signup</a>
