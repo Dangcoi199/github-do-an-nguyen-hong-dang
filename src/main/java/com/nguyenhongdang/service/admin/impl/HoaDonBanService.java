@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.nguyenhongdang.constant.StatusConstant;
@@ -25,6 +26,8 @@ import com.nguyenhongdang.utils.SendMailUtil;
 
 @Service
 public class HoaDonBanService implements IHoaDonBanService {
+	@Autowired
+	private Environment env;
 	@Autowired
 	EntityManager entityManager;
 	@Autowired
@@ -46,7 +49,7 @@ public class HoaDonBanService implements IHoaDonBanService {
 		entity.setOrderInfo(entityManager.find(OrderInfoEntity.class, id));
 		entity = hdbRepo.save(entity);
 		// Send mail
-		String content = "<a href='http://localhost:8080/order_detail_email?id=" + entity.getId()
+		String content = "<a href='"+env.getProperty("app.mailsender.redirect.uri.success") + entity.getId()
 				+ "' style='color:red;' >Chi tiết đơn hàng</a>"
 				+ "<img src='https://www.english-learning.net/wp-content/uploads/2020/04/thank_you_2.jpg' style='width: 20%; height: auto;'>";
 		sendMail.SendMail(orderInfo.getEmail(), content, "XÁC NHẬN ĐƠN HÀNG THÀNH CÔNG");
@@ -71,7 +74,7 @@ public class HoaDonBanService implements IHoaDonBanService {
 		query.setParameter("orderInfo", entity);
 		query.executeUpdate();
 		// Send mail
-		String content = "<a href='http://localhost:8088/' style='color:red;'>LUXURY WATCHES</a> "
+		String content = "<a href='"+env.getProperty("app.mailsender.redirect.uri.cancel")+ "' style='color:red;'>LUXURY WATCHES</a> "
 				+ "<img src='https://www.english-learning.net/wp-content/uploads/2020/04/thank_you_2.jpg' style='width: 20%; height: auto;'>";
 		sendMail.SendMail(entity.getEmail(), content, "ĐƠN HÀNG ĐÃ BỊ HỦY");
 

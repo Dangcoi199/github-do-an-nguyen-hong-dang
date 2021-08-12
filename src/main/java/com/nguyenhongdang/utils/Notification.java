@@ -6,6 +6,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -18,12 +19,17 @@ import com.nguyenhongdang.repository.ITokenRepository;
 @Component
 public class Notification {
 	@Autowired
+	private Environment env;
+	
+	@Autowired
 	private ITokenRepository tokenRepo;
 	@Autowired
 	private ISanPhamRepository sanPhamRepo;
 	
 	public void sendNotification(List<String> tokens,String productCode)  {
-		String link = "http://localhost:8080/productDetail?code="+productCode;
+		/* String link = "http://localhost:8080/productDetail?code="+productCode; */
+		String link= env.getProperty("app.firebase.redirect.uri")+productCode;
+		System.out.println(link);
 		System.out.println("Đã gửi đến :" + tokens.size());
 		MulticastMessage message = MulticastMessage.builder().putData("title", "Luxury Watches")
 				.putData("content", "Sản phẩm đã có hàng, quý khách hãy tham khảo !")

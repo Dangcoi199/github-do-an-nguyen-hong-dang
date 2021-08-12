@@ -23,7 +23,7 @@ import com.nguyenhongdang.service.web.IShoppingCartService;
 public class ShoppingCartService implements IShoppingCartService {
 	@Autowired
 	private ISanPhamService sanphamService;
-	
+
 	@Autowired
 	private ISanPhamRepository spRepo;
 
@@ -54,7 +54,7 @@ public class ShoppingCartService implements IShoppingCartService {
 			}
 			item.setThanh_Tien(item.getQty() * item.getPrice());
 			maps.put(item.getProductId(), item);
-		}else {
+		} else {
 			cartItem.setQty(cartItem.getQty() + 1);
 			cartItem.setThanh_Tien(cartItem.getPrice() * cartItem.getQty());
 		}
@@ -68,6 +68,7 @@ public class ShoppingCartService implements IShoppingCartService {
 		SanPhamEntity productEntity = spRepo.getOne((long) productId);
 		productEntity.setQuantity(productEntity.getQuantity() + dto.getQty());
 		spRepo.save(productEntity);
+
 		maps.remove(productId);
 
 	}
@@ -82,9 +83,9 @@ public class ShoppingCartService implements IShoppingCartService {
 	@Override
 	@Transactional
 	public void clear() {
-		for(CartItemDTO item : maps.values()) {
-			SanPhamEntity product = spRepo.getOne((long)item.getProductId());
-			product.setQuantity(product.getQuantity()+item.getQty());
+		for (CartItemDTO item : maps.values()) {
+			SanPhamEntity product = spRepo.getOne((long) item.getProductId());
+			product.setQuantity(product.getQuantity() + item.getQty());
 			spRepo.save(product);
 		}
 		maps.clear();

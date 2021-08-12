@@ -68,7 +68,12 @@ public class GoogleUtils {
 	  }
 
 	@Transactional
-	public UserDetails buildUser(GooglePojo googlePojo) {		
+	public UserDetails buildUser(GooglePojo googlePojo) {
+		boolean enabled = true;
+		boolean accountNonExpired = true;
+		boolean credentialsNonExpired = true;
+		boolean accountNonLocked = true;
+		List<GrantedAuthority> authorities = new ArrayList<>();
 		UserEntity entity = userRepo.findByUsername(googlePojo.getEmail());
 		if(entity == null) {
 			UserEntity newUser = new UserEntity();
@@ -79,14 +84,13 @@ public class GoogleUtils {
 			newUser.setLoaiTaiKhoan(LoaiTaiKhoanConstant.GOOGLE);
 			List<RoleEntity> roles = roleRepo.findByCode("ROLE_MEMBER");
 			newUser.setRoles(roles);
-			entityManager.persist(newUser);
-		}		
-		boolean enabled = true;
-		boolean accountNonExpired = true;
-		boolean credentialsNonExpired = true;
-		boolean accountNonLocked = true;
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+			entityManager.persist(newUser);			
+			authorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+		}else {
+			for(RoleEntity role : entity.getRoles()) {
+				authorities.add(new SimpleGrantedAuthority(role.getCode()));
+			}
+		}
 		UserDetails userDetails = new User(googlePojo.getEmail(), "", enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		return userDetails;
 	}
